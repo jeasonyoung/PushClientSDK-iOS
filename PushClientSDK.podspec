@@ -10,5 +10,6 @@ Pod::Spec.new do |s|
 	s.source_files = "PushClientSDK/PushClientSDK"
 	s.requires_arc = true
 
+	s.dependency "AFNetworking","~>2.0"
 	s.dependency "CocoaAsyncSocket" 
 end

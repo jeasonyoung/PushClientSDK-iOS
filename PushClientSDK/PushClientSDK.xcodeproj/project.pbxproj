@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A10435181E4BF29B00CEC953 /* AccessData.m in Sources */ = {isa = PBXBuildFile; fileRef = A10435171E4BF29B00CEC953 /* AccessData.m */; };
+		A104351C1E4C0EAD00CEC953 /* NSString+ExtTools.m in Sources */ = {isa = PBXBuildFile; fileRef = A104351B1E4C0EAD00CEC953 /* NSString+ExtTools.m */; };
+		A104351F1E4C59BB00CEC953 /* RequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = A104351E1E4C59BB00CEC953 /* RequestData.m */; };
 		A10A0F4D1E4AC3C500F2B8C3 /* PushClientSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = A10A0F4C1E4AC3C500F2B8C3 /* PushClientSDK.m */; };
 		A10A0F4E1E4AC3C500F2B8C3 /* PushClientSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10A0F4B1E4AC3C500F2B8C3 /* PushClientSDK.h */; };
+		A1A56B651E56A7D500C2A2D5 /* SocketConfigData.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A56B641E56A7D500C2A2D5 /* SocketConfigData.m */; };
 		D2F8E42B792CBAB8247FF2BE /* libPods-PushClientSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C2E8DCB26543BAC18DDA272 /* libPods-PushClientSDK.a */; };
 /* End PBXBuildFile section */
 
@@ -28,9 +32,17 @@
 /* Begin PBXFileReference section */
 		01809BE8BA7980CF5ABE15A9 /* Pods-PushClientSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushClientSDK.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-PushClientSDK/Pods-PushClientSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		9C2E8DCB26543BAC18DDA272 /* libPods-PushClientSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PushClientSDK.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10435161E4BF29B00CEC953 /* AccessData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessData.h; sourceTree = "<group>"; };
+		A10435171E4BF29B00CEC953 /* AccessData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessData.m; sourceTree = "<group>"; };
+		A104351A1E4C0EAD00CEC953 /* NSString+ExtTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ExtTools.h"; sourceTree = "<group>"; };
+		A104351B1E4C0EAD00CEC953 /* NSString+ExtTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ExtTools.m"; sourceTree = "<group>"; };
+		A104351D1E4C59BB00CEC953 /* RequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestData.h; sourceTree = "<group>"; };
+		A104351E1E4C59BB00CEC953 /* RequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestData.m; sourceTree = "<group>"; };
 		A10A0F481E4AC3C500F2B8C3 /* libPushClientSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPushClientSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10A0F4B1E4AC3C500F2B8C3 /* PushClientSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PushClientSDK.h; sourceTree = "<group>"; };
 		A10A0F4C1E4AC3C500F2B8C3 /* PushClientSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PushClientSDK.m; sourceTree = "<group>"; };
+		A1A56B631E56A7D500C2A2D5 /* SocketConfigData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConfigData.h; sourceTree = "<group>"; };
+		A1A56B641E56A7D500C2A2D5 /* SocketConfigData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConfigData.m; sourceTree = "<group>"; };
 		F5CB48AA5BA51B9A5205AE48 /* Pods-PushClientSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PushClientSDK.release.xcconfig"; path = "../Pods/Target Support Files/Pods-PushClientSDK/Pods-PushClientSDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,6 +64,28 @@
 				9C2E8DCB26543BAC18DDA272 /* libPods-PushClientSDK.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A10435151E4BF1F200CEC953 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				A10435161E4BF29B00CEC953 /* AccessData.h */,
+				A10435171E4BF29B00CEC953 /* AccessData.m */,
+				A1A56B631E56A7D500C2A2D5 /* SocketConfigData.h */,
+				A1A56B641E56A7D500C2A2D5 /* SocketConfigData.m */,
+				A104351D1E4C59BB00CEC953 /* RequestData.h */,
+				A104351E1E4C59BB00CEC953 /* RequestData.m */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
+		A10435191E4C0E1700CEC953 /* category */ = {
+			isa = PBXGroup;
+			children = (
+				A104351A1E4C0EAD00CEC953 /* NSString+ExtTools.h */,
+				A104351B1E4C0EAD00CEC953 /* NSString+ExtTools.m */,
+			);
+			name = category;
 			sourceTree = "<group>";
 		};
 		A10A0F3F1E4AC3C500F2B8C3 = {
@@ -77,6 +111,8 @@
 			children = (
 				A10A0F4B1E4AC3C500F2B8C3 /* PushClientSDK.h */,
 				A10A0F4C1E4AC3C500F2B8C3 /* PushClientSDK.m */,
+				A10435151E4BF1F200CEC953 /* data */,
+				A10435191E4C0E1700CEC953 /* category */,
 			);
 			path = PushClientSDK;
 			sourceTree = "<group>";
@@ -183,7 +219,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1A56B651E56A7D500C2A2D5 /* SocketConfigData.m in Sources */,
 				A10A0F4D1E4AC3C500F2B8C3 /* PushClientSDK.m in Sources */,
+				A104351C1E4C0EAD00CEC953 /* NSString+ExtTools.m in Sources */,
+				A10435181E4BF29B00CEC953 /* AccessData.m in Sources */,
+				A104351F1E4C59BB00CEC953 /* RequestData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
