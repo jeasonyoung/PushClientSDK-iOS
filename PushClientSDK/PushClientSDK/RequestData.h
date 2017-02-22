@@ -8,31 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#import "BaseModel.h"
 #import "AccessData.h"
-
-/**
- * @brief 请求参数-接入帐号字段
- **/
-FOUNDATION_EXPORT NSString * const REQ_PARAMS_ACCOUNT;
-/**
- * @brief 请求参数-参数签名字段
- **/
-FOUNDATION_EXPORT NSString * const REQ_PARAMS_SIGN;
 
 /**
  * @brief 请求数据基础类。
  **/
-@interface RequestData : NSObject{
-    /**
-     * @brief 接入访问数据。
-     **/
-    @protected const AccessData *_accessData;
-}
-
-/**
- * @brief 获取参数集合。
- **/
-@property(strong,nonatomic,readonly)NSDictionary *parameters;
+@interface RequestData : BaseModel
 
 /**
  * @brief 初始化。

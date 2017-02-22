@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "PublishModel.h"
 /**
  * @brief 错误类型枚举。
  **/
@@ -48,10 +49,12 @@ typedef NS_ENUM(NSInteger, PushClientSDKErrorType){
  * @param sdk SDK实例对象。
  * @param title 接收推送消息标题。
  * @param content 推送消息内容。
+ * @param data 完整的推送消息。
  **/
 -(void)pushClientSDK:(PushClientSDK *)sdk
 receivePushMessageTitle:(NSString *)title
-   andMessageContent:(NSString *)content;
+   andMessageContent:(NSString *)content
+     withFullPublish:(PublishModel *)data;
 
 @end
 
