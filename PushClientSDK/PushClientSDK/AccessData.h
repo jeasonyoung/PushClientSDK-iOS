@@ -33,7 +33,12 @@
 /**
  * @brief 获取设备令牌。
  **/
-@property(strong,nonatomic,readonly)NSData *deviceToken;
+@property(strong,nonatomic,readonly)NSString *deviceToken;
+
+/**
+ * @brief 获取设备名称。
+ **/
+@property(strong,nonatomic,readonly)NSString *deviceName;
 
 /**
  * @brief 获取用户标签(应与服务端发送目标一致)。

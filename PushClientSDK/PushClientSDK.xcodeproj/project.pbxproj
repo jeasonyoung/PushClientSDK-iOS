@@ -15,6 +15,8 @@
 		A10B42F91E59E3670023C160 /* PushSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A10B42F81E59E3670023C160 /* PushSocket.m */; };
 		A1A56B651E56A7D500C2A2D5 /* SocketConfigData.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A56B641E56A7D500C2A2D5 /* SocketConfigData.m */; };
 		A1B2B83F1E5D7BC800D944FE /* CodecEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B83E1E5D7BC800D944FE /* CodecEncoder.m */; };
+		A1B2B8421E5DCF0D00D944FE /* Codec.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B8411E5DCF0D00D944FE /* Codec.m */; };
+		A1B2B8451E5FD06A00D944FE /* CodecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B8441E5FD06A00D944FE /* CodecDecoder.m */; };
 		A1E2B0FB1E5AF54D0084FD87 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E2B0FA1E5AF54D0084FD87 /* BaseModel.m */; };
 		A1E2B0FE1E5B1ACF0084FD87 /* RequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E2B0FD1E5B1ACF0084FD87 /* RequestModel.m */; };
 		A1E2B1031E5B1C340084FD87 /* ConnectRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E2B1021E5B1C340084FD87 /* ConnectRequestModel.m */; };
@@ -59,6 +61,10 @@
 		A1A56B641E56A7D500C2A2D5 /* SocketConfigData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConfigData.m; sourceTree = "<group>"; };
 		A1B2B83D1E5D7BC800D944FE /* CodecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodecEncoder.h; sourceTree = "<group>"; };
 		A1B2B83E1E5D7BC800D944FE /* CodecEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodecEncoder.m; sourceTree = "<group>"; };
+		A1B2B8401E5DCF0D00D944FE /* Codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Codec.h; sourceTree = "<group>"; };
+		A1B2B8411E5DCF0D00D944FE /* Codec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Codec.m; sourceTree = "<group>"; };
+		A1B2B8431E5FD06A00D944FE /* CodecDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodecDecoder.h; sourceTree = "<group>"; };
+		A1B2B8441E5FD06A00D944FE /* CodecDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodecDecoder.m; sourceTree = "<group>"; };
 		A1E2B0F91E5AF54D0084FD87 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModel.h; sourceTree = "<group>"; };
 		A1E2B0FA1E5AF54D0084FD87 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModel.m; sourceTree = "<group>"; };
 		A1E2B0FC1E5B1ACF0084FD87 /* RequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestModel.h; sourceTree = "<group>"; };
@@ -162,8 +168,12 @@
 			children = (
 				A10B42F71E59E3670023C160 /* PushSocket.h */,
 				A10B42F81E59E3670023C160 /* PushSocket.m */,
+				A1B2B8401E5DCF0D00D944FE /* Codec.h */,
+				A1B2B8411E5DCF0D00D944FE /* Codec.m */,
 				A1B2B83D1E5D7BC800D944FE /* CodecEncoder.h */,
 				A1B2B83E1E5D7BC800D944FE /* CodecEncoder.m */,
+				A1B2B8431E5FD06A00D944FE /* CodecDecoder.h */,
+				A1B2B8441E5FD06A00D944FE /* CodecDecoder.m */,
 			);
 			name = socket;
 			sourceTree = "<group>";
@@ -297,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B2B8421E5DCF0D00D944FE /* Codec.m in Sources */,
 				A10B42F91E59E3670023C160 /* PushSocket.m in Sources */,
 				A1A56B651E56A7D500C2A2D5 /* SocketConfigData.m in Sources */,
 				A1E66C231E5BDD1E0015FA25 /* SubscribeRequestModel.m in Sources */,
@@ -311,6 +322,7 @@
 				A1E66C321E5C95EB0015FA25 /* PingRequestModel.m in Sources */,
 				A104351C1E4C0EAD00CEC953 /* NSString+ExtTools.m in Sources */,
 				A1E66C351E5C97330015FA25 /* PingResponseModel.m in Sources */,
+				A1B2B8451E5FD06A00D944FE /* CodecDecoder.m in Sources */,
 				A1E66C2F1E5C93400015FA25 /* PubAckRequestModel.m in Sources */,
 				A10435181E4BF29B00CEC953 /* AccessData.m in Sources */,
 				A104351F1E4C59BB00CEC953 /* RequestData.m in Sources */,

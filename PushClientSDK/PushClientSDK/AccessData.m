@@ -7,6 +7,7 @@
 //
 
 #import "AccessData.h"
+#import <UIKit/UIKit.h>
 
 #import "NSString+ExtTools.h"
 
@@ -24,6 +25,15 @@
     return _instance;
 }
 
+#pragma mark -- 初始化
+-(instancetype)init{
+    if(self = [super init]){
+        UIDevice *device = [UIDevice currentDevice];
+        _deviceName = [NSString stringWithFormat:@"%@-%@(%@)", device.systemName, device.systemVersion, device.name];
+    }
+    return self;
+}
+
 #pragma mark -- 初始化数据
 -(void)initialWithURL:(NSString *)url andAccount:(NSString *)account andPassword:(NSString *)pwd andDeviceToken:(NSData *)token{
     //1.服务器地址URL
@@ -33,7 +43,11 @@
     //3.接入密码
     _password = pwd ? [pwd trim] : @"";
     //4.设备令牌
-    _deviceToken = token;
+    if(token && token.length){
+        _deviceToken = [[NSString alloc] initWithData:token encoding:NSUTF8StringEncoding];
+    }else{
+        _deviceToken = nil;
+    }
 }
 
 #pragma mark -- 新增或更新设备用户标签
