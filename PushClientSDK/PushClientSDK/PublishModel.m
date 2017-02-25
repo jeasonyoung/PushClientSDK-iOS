@@ -93,7 +93,7 @@ static NSString * const PUBLISH_APS = @"aps";
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:objData
                                                          options:kNilOptions
                                                            error:&err];
-    if(err) NSLog(@"publishWithJSON-异常(\n%@\n)=>\n%@", json, err);
+    if(err) NSLog(@"publishWithJSON:-异常(\n%@\n)=>\n%@", json, err);
     //
     return [[PublishModel alloc] initWithData:dict];
 }

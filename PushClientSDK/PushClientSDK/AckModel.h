@@ -52,11 +52,19 @@ typedef NS_ENUM(NSInteger, AckModelResult){
 @property(copy, nonatomic, readonly)NSString *msg;
 
 /**
- * @brief 创建对象。
+ * @brief 初始化对象。
  * @param type 反馈消息类型。
- * @param ack 反馈数据集合。
- * @return 创建对象实例。
+ * @param ack 反馈的数据集合。
+ * @return 反馈对象实例。
  **/
-+(instancetype)ackWithType:(PushSocketMessageType)type andAckResult:(NSDictionary *)ack;
+-(instancetype)initWithType:(PushSocketMessageType)type andAck:(NSDictionary *)ack;
+
+/**
+ * @brief 静态初始化对象。
+ * @param type 反馈消息类型。
+ * @param json 反馈的JSON数据。
+ * @return 反馈对象实例。
+ **/
++(instancetype)ackWithType:(PushSocketMessageType)type andAckJson:(NSString *)json;
 
 @end

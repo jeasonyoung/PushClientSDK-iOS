@@ -14,28 +14,33 @@ static NSString * const MODEL_MSG    = @"msg";
 //实现。
 @implementation AckModel
 
-#pragma mark -- 静态创建对象。
-+(instancetype)ackWithType:(PushSocketMessageType)type andAckResult:(NSDictionary *)ack{
-    if(!ack || !ack.count){
-        @throw [NSException exceptionWithName:@"data" reason:@"数据不能为空!" userInfo:nil];
-    }
-    //
-    return [[AckModel alloc] initWithType:type
-                               withResult:[[ack objectForKey:MODEL_RESULT] integerValue]
-                              withMessage:(NSString *)[ack objectForKey:MODEL_MSG]];
-}
-
-#pragma mark -- 构造函数。
--(instancetype)initWithType:(PushSocketMessageType)type withResult:(NSInteger)result withMessage:(NSString *)msg{
-    if(self = [super init]){
-        //反馈类型
+#pragma mark -- 初始化
+-(instancetype)initWithType:(PushSocketMessageType)type andAck:(NSDictionary *)ack{
+    if((self = [super init]) && ack && ack.count){
+        //1.反馈消息类型
         _type = type;
-        //状态
-        _result = (AckModelResult)result;
-        //消息
-        _msg = (msg ? msg : @"");
+        //2.反馈状态
+        _result = (AckModelResult)[ack[MODEL_RESULT] integerValue];
+        //3.反馈消息
+        _msg = ack[MODEL_MSG];
     }
     return self;
 }
+
+#pragma mark -- 静态初始化
++(instancetype)ackWithType:(PushSocketMessageType)type andAckJson:(NSString *)json{
+    NSDictionary *dict = nil;
+    if(json && json.length){
+        NSError *err = nil;
+        NSData *obj = [json dataUsingEncoding:NSUTF8StringEncoding];
+        dict = [NSJSONSerialization JSONObjectWithData:obj
+                                               options:kNilOptions
+                                                 error:&err];
+        if(err) NSLog(@"ackWithType:andAckJson:-异常(\n%@\n)=>\n%@", json, err);
+    }
+    //
+    return [[AckModel alloc] initWithType:type andAck:dict];
+}
+
 
 @end
