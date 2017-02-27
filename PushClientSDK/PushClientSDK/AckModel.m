@@ -42,5 +42,9 @@ static NSString * const MODEL_MSG    = @"msg";
     return [[AckModel alloc] initWithType:type andAck:dict];
 }
 
+-(NSString *)description{
+    return [NSString stringWithFormat:@"type:%ld,result:%ld,msg:%@", self.type, self.result, self.msg];
+}
+
 
 @end

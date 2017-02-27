@@ -21,22 +21,22 @@
 /**
  * @brief 获取socket服务器端口。
  **/
-@property(assign, nonatomic, readonly)NSInteger port;
+@property(assign, nonatomic, readonly)NSUInteger port;
 
 /**
  * @brief 获取socket心跳间隔值(秒)。
  **/
-@property(assign, nonatomic, readonly)NSInteger rate;
+@property(assign, nonatomic, readwrite)NSUInteger rate;
 
 /**
  * @brief 获取socket心跳丢失次数。
  **/
-@property(assign, nonatomic, readonly)NSInteger times;
+@property(assign, nonatomic, readonly)NSUInteger times;
 
 /**
  * @brief 获取socket重连时间(秒)。
  **/
-@property(assign, nonatomic, readonly)NSInteger reconnect;
+@property(assign, nonatomic, readwrite)NSUInteger reconnect;
 
 /**
  * @brief 初始化数据。

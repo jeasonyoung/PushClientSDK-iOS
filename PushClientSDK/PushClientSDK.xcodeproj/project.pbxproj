@@ -17,6 +17,9 @@
 		A1B2B83F1E5D7BC800D944FE /* CodecEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B83E1E5D7BC800D944FE /* CodecEncoder.m */; };
 		A1B2B8421E5DCF0D00D944FE /* Codec.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B8411E5DCF0D00D944FE /* Codec.m */; };
 		A1B2B8451E5FD06A00D944FE /* CodecDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B8441E5FD06A00D944FE /* CodecDecoder.m */; };
+		A1B2B8481E62CAA500D944FE /* PushSocket+MessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B8471E62CAA500D944FE /* PushSocket+MessageHandler.m */; };
+		A1B2B84B1E63D09700D944FE /* PushSocket+Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B84A1E63D09700D944FE /* PushSocket+Timer.m */; };
+		A1B2B84E1E63D79A00D944FE /* DisconnectModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B84D1E63D79A00D944FE /* DisconnectModel.m */; };
 		A1E2B0FB1E5AF54D0084FD87 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E2B0FA1E5AF54D0084FD87 /* BaseModel.m */; };
 		A1E2B0FE1E5B1ACF0084FD87 /* RequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E2B0FD1E5B1ACF0084FD87 /* RequestModel.m */; };
 		A1E2B1031E5B1C340084FD87 /* ConnectRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1E2B1021E5B1C340084FD87 /* ConnectRequestModel.m */; };
@@ -65,6 +68,12 @@
 		A1B2B8411E5DCF0D00D944FE /* Codec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Codec.m; sourceTree = "<group>"; };
 		A1B2B8431E5FD06A00D944FE /* CodecDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodecDecoder.h; sourceTree = "<group>"; };
 		A1B2B8441E5FD06A00D944FE /* CodecDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodecDecoder.m; sourceTree = "<group>"; };
+		A1B2B8461E62CAA500D944FE /* PushSocket+MessageHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PushSocket+MessageHandler.h"; sourceTree = "<group>"; };
+		A1B2B8471E62CAA500D944FE /* PushSocket+MessageHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PushSocket+MessageHandler.m"; sourceTree = "<group>"; };
+		A1B2B8491E63D09700D944FE /* PushSocket+Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PushSocket+Timer.h"; sourceTree = "<group>"; };
+		A1B2B84A1E63D09700D944FE /* PushSocket+Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PushSocket+Timer.m"; sourceTree = "<group>"; };
+		A1B2B84C1E63D79A00D944FE /* DisconnectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisconnectModel.h; sourceTree = "<group>"; };
+		A1B2B84D1E63D79A00D944FE /* DisconnectModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisconnectModel.m; sourceTree = "<group>"; };
 		A1E2B0F91E5AF54D0084FD87 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModel.h; sourceTree = "<group>"; };
 		A1E2B0FA1E5AF54D0084FD87 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModel.m; sourceTree = "<group>"; };
 		A1E2B0FC1E5B1ACF0084FD87 /* RequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestModel.h; sourceTree = "<group>"; };
@@ -123,13 +132,13 @@
 			name = data;
 			sourceTree = "<group>";
 		};
-		A10435191E4C0E1700CEC953 /* category */ = {
+		A10435191E4C0E1700CEC953 /* utils */ = {
 			isa = PBXGroup;
 			children = (
 				A104351A1E4C0EAD00CEC953 /* NSString+ExtTools.h */,
 				A104351B1E4C0EAD00CEC953 /* NSString+ExtTools.m */,
 			);
-			name = category;
+			name = utils;
 			sourceTree = "<group>";
 		};
 		A10A0F3F1E4AC3C500F2B8C3 = {
@@ -158,7 +167,7 @@
 				A10435151E4BF1F200CEC953 /* data */,
 				A1E2B0F81E5AF4CF0084FD87 /* model */,
 				A10B42F61E59DF450023C160 /* socket */,
-				A10435191E4C0E1700CEC953 /* category */,
+				A10435191E4C0E1700CEC953 /* utils */,
 			);
 			path = PushClientSDK;
 			sourceTree = "<group>";
@@ -168,6 +177,10 @@
 			children = (
 				A10B42F71E59E3670023C160 /* PushSocket.h */,
 				A10B42F81E59E3670023C160 /* PushSocket.m */,
+				A1B2B8461E62CAA500D944FE /* PushSocket+MessageHandler.h */,
+				A1B2B8471E62CAA500D944FE /* PushSocket+MessageHandler.m */,
+				A1B2B8491E63D09700D944FE /* PushSocket+Timer.h */,
+				A1B2B84A1E63D09700D944FE /* PushSocket+Timer.m */,
 				A1B2B8401E5DCF0D00D944FE /* Codec.h */,
 				A1B2B8411E5DCF0D00D944FE /* Codec.m */,
 				A1B2B83D1E5D7BC800D944FE /* CodecEncoder.h */,
@@ -201,6 +214,8 @@
 				A1E66C311E5C95EB0015FA25 /* PingRequestModel.m */,
 				A1E66C331E5C97330015FA25 /* PingResponseModel.h */,
 				A1E66C341E5C97330015FA25 /* PingResponseModel.m */,
+				A1B2B84C1E63D79A00D944FE /* DisconnectModel.h */,
+				A1B2B84D1E63D79A00D944FE /* DisconnectModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -312,8 +327,11 @@
 				A1A56B651E56A7D500C2A2D5 /* SocketConfigData.m in Sources */,
 				A1E66C231E5BDD1E0015FA25 /* SubscribeRequestModel.m in Sources */,
 				A1E66C291E5C3BEF0015FA25 /* UnsubscribeRequestModel.m in Sources */,
+				A1B2B8481E62CAA500D944FE /* PushSocket+MessageHandler.m in Sources */,
 				A10A0F4D1E4AC3C500F2B8C3 /* PushClientSDK.m in Sources */,
 				A1E2B0FE1E5B1ACF0084FD87 /* RequestModel.m in Sources */,
+				A1B2B84B1E63D09700D944FE /* PushSocket+Timer.m in Sources */,
+				A1B2B84E1E63D79A00D944FE /* DisconnectModel.m in Sources */,
 				A1E2B0FB1E5AF54D0084FD87 /* BaseModel.m in Sources */,
 				A1E66C2C1E5C46510015FA25 /* PublishModel.m in Sources */,
 				A1E2B1091E5B21320084FD87 /* AckModel.m in Sources */,

@@ -38,4 +38,9 @@ static NSString * const PARAMS_AFTERCONNECT = @"afterConnect";
     return [[PingResponseModel alloc] initWithData:dict];
 }
 
+-(NSString *)description{
+    return [NSString stringWithFormat:@"{\"%@\":%ld,\"%@\":%ld}",
+            PARAMS_HEARTRATE,self.heartRate,PARAMS_AFTERCONNECT,self.afterConnect];
+}
+
 @end

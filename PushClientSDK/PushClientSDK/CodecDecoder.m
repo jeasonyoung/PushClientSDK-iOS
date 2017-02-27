@@ -105,7 +105,7 @@ static NSUInteger const HEAD_DATA_MIN_LEN = 5;
     if(payload && payload.length){
         //转换为JSON字符串。
         json = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
-        NSLog(@"decoder=>\n%@", json);
+        NSLog(@"decoder[%ld]=>\n%@", header.type, json);
     }
     //解析消息体
     switch (header.type) {

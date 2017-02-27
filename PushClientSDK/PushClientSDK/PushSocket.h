@@ -10,6 +10,9 @@
 
 #import "AccessData.h"
 #import "PushSocketMessageType.h"
+#import "CodecEncoder.h"
+#import "CodecDecoder.h"
+
 #import "PublishModel.h"
 
 @class PushSocket;
@@ -52,12 +55,35 @@
 /**
  * @brief 推送socket处理。
  **/
-@interface PushSocket : NSObject
+@interface PushSocket : NSObject{
+    /**
+     * @brief socket客户端配置对象。
+     **/
+    AccessData *_config;
+    /**
+     * @brief 消息编码器。
+     **/
+    CodecEncoder *_encoder;
+    /**
+     * @brief 消息解码器。
+     **/
+    CodecDecoder *_decoder;
+}
 
 /**
  * @brief 是否在运行中。
  **/
 @property(assign,atomic,readonly)BOOL isRun;
+
+/**
+ * @brief 获取或设置是否已启动socket。
+ **/
+@property(assign,atomic,readonly)BOOL isStart;
+
+/**
+ * @brief 获取或设置上一次消息活动时间。
+ **/
+@property(assign,atomic,readonly)NSTimeInterval lastIdleTime;
 
 /**
  * @brief 代理属性。
@@ -89,4 +115,23 @@
  **/
 -(void)stop;
 
+/**
+ * @brief 向服务器发送请求数据。
+ * @param data 请求数据。
+ **/
+-(void)sendRequestWithData:(NSData *)data;
+
+/**
+ * @brief 抛出异常错误消息处理。
+ * @param type 抛出异常的消息类型。
+ * @param message 异常错误消息内容。
+ **/
+-(void)throwsErrorWithMessageType:(PushSocketMessageType)type andMessage:(NSString *)message;
+
+/**
+ * @brief 抛出异常错误消息处理。
+ * @param type 抛出异常的消息类型。
+ * @param error 异常错误。
+ **/
+-(void)throwsErrorWithMessageType:(PushSocketMessageType)type andError:(NSError *)error;
 @end
