@@ -31,11 +31,11 @@
 -(void)receivePingAckHandler:(PingResponseModel *)pingAck{
     NSLog(@"socket-心跳反馈处理=>%@", pingAck);
     if(!pingAck) return;
-    if(pingAck.heartRate > 0 && _config && _config.socket){
-        _config.socket.rate = pingAck.heartRate;
+    if(pingAck.heartRate > 0 && self.getConfig && self.getConfig.socket){
+        self.getConfig.socket.rate = pingAck.heartRate;
     }
-    if(pingAck.afterConnect > 0 && _config && _config.socket){
-        _config.socket.reconnect = pingAck.afterConnect;
+    if(pingAck.afterConnect > 0 && self.getConfig && self.getConfig.socket){
+        self.getConfig.socket.reconnect = pingAck.afterConnect;
     }
 }
 
@@ -45,9 +45,13 @@
         [self throwsErrorWithMessageType:PushSocketMessageTypePublish andMessage:@"推送消息解析失败!"];
         return;
     }
+    if(!self.getEncoder){
+        [self throwsErrorWithMessageType:PushSocketMessageTypePublish andMessage:@"获取消息编码器失败!"];
+        return;
+    }
     //发送推送消息到达请求消息
     __weak typeof(self) wSelf = self;
-    [_encoder encoderPublishAckRequestWithConfig:_config andPushId:data.pushId handler:^(NSData *buf) {
+    [self.getEncoder encoderPublishAckRequestWithConfig:self.getConfig andPushId:data.pushId handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
     //推送消息抛出处理

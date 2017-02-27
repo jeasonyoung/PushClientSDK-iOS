@@ -21,7 +21,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //获取配置
-        SocketConfigData *conf = _config ? _config.socket : nil;
+        SocketConfigData *conf = self.getConfig ? self.getConfig.socket : nil;
         if(!conf || !conf.reconnect){
             onceToken = 0;
             NSLog(@"获取重连间隔时间失败!");
@@ -77,7 +77,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //获取配置
-        SocketConfigData *conf = _config ? _config.socket : nil;
+        SocketConfigData *conf = self.getConfig ? self.getConfig.socket : nil;
         if(!conf || !conf.rate){
             onceToken = 0;
             NSLog(@"获取心跳间隔时间失败!");
@@ -108,8 +108,8 @@
             //执行心跳处理
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"socket-发送心跳请求...");
-                if(!_encoder) return;
-                [_encoder encoderPingRequestWithConfig:_config handler:^(NSData *buf) {
+                if(!wSelf.getEncoder) return;
+                [wSelf.getEncoder encoderPingRequestWithConfig:wSelf.getConfig handler:^(NSData *buf) {
                     [wSelf sendRequestWithData:buf];
                 }];
             });

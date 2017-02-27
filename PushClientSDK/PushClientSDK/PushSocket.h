@@ -11,7 +11,6 @@
 #import "AccessData.h"
 #import "PushSocketMessageType.h"
 #import "CodecEncoder.h"
-#import "CodecDecoder.h"
 
 #import "PublishModel.h"
 
@@ -55,21 +54,7 @@
 /**
  * @brief 推送socket处理。
  **/
-@interface PushSocket : NSObject{
-    /**
-     * @brief socket客户端配置对象。
-     **/
-    AccessData *_config;
-    /**
-     * @brief 消息编码器。
-     **/
-    CodecEncoder *_encoder;
-    /**
-     * @brief 消息解码器。
-     **/
-    CodecDecoder *_decoder;
-}
-
+@interface PushSocket : NSObject
 /**
  * @brief 是否在运行中。
  **/
@@ -84,6 +69,16 @@
  * @brief 获取或设置上一次消息活动时间。
  **/
 @property(assign,atomic,readonly)NSTimeInterval lastIdleTime;
+
+/**
+ * @brief 获取配置。
+ **/
+@property(retain,atomic,readonly, getter=getConfig)AccessData *config;
+
+/**
+ * @brief 获取消息编码器。
+ **/
+@property(retain,atomic,readonly, getter=getEncoder)CodecEncoder *encoder;
 
 /**
  * @brief 代理属性。

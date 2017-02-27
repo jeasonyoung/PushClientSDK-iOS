@@ -11,10 +11,7 @@
 #import "PushSocket+Timer.h"
 
 #import "GCDAsyncSocket.h"
-
-#import "ConnectRequestModel.h"
-
-#import "AckModel.h"
+#import "CodecDecoder.h"
 
 #define DISPATCH_QUEUE_DQ_NAME "com.csblank.push.dq"
 
@@ -24,6 +21,10 @@
      * @brief socket通讯对象。
      **/
     GCDAsyncSocket *_socket;
+    /**
+     * @brief 消息解码器。
+     **/
+    CodecDecoder *_decoder;
 }
 
 @end
@@ -53,6 +54,7 @@
         _encoder = [[CodecEncoder alloc] init];
         //4.消息解码
         _decoder = [[CodecDecoder alloc] init];
+        
         _decoder.delegate = self;
     }
     return self;
