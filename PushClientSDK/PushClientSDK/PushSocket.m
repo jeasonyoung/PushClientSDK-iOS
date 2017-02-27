@@ -54,7 +54,7 @@
         _encoder = [[CodecEncoder alloc] init];
         //4.消息解码
         _decoder = [[CodecDecoder alloc] init];
-        
+        //设置解码器委托
         _decoder.delegate = self;
     }
     return self;
