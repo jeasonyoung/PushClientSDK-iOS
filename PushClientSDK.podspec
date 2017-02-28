@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
 	s.author       = {"yangyong"=>"jeason1914@qq.com"}
 	s.source       = {:git=>"https://github.com/jeasonyoung/PushClientSDK-iOS.git", :tag=>"#{s.version}"}
 	s.platform     = :ios
-	s.source_files = "PushClientSDK/PushClientSDK"
+	s.source_files = "PushClientSDK/PushClientSDK/*.{h,m}"
 	s.requires_arc = true
 
 	s.dependency "AFNetworking","~>2.0"
