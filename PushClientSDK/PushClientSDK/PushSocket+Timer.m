@@ -34,30 +34,33 @@
             NSLog(@"restartConnectHandler(reconnect:%zd,times:%zd)-参数错误!", reconnectSleep, reconnectMaxTotals);
             return;
         }
-        __weak __typeof(self) wSelf = self;
+        __weak typeof(self) weakSelf = self;
         //重连队列
         dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_SERIAL);
         //启动异步线程
         dispatch_async(queue, ^{
             //启动执行次数
             dispatch_apply(reconnectMaxTotals, queue, ^(size_t index) {
-                if(!wSelf || !wSelf.isStart || wSelf.isRun){
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if(!strongSelf || !strongSelf.isStart || strongSelf.isRun){
                     onceToken = 0;
                     return;
                 }
                 //线程延迟执行
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(reconnectSleep * NSEC_PER_SEC)), queue, ^{
                     //检查主线程是否已结束
-                    if(!wSelf.isStart || wSelf.isRun){
+                    if(!strongSelf.isStart || strongSelf.isRun){
                         onceToken = 0;
                         return;
                     }
-                    NSLog(@"restartConnectHandler-重连次数(%ld)=>(start:%d,run:%d)", index, wSelf.isStart, wSelf.isRun);
+                    NSLog(@"restartConnectHandler-重连次数(%ld)=>(start:%d,run:%d)", index, strongSelf.isStart, strongSelf.isRun);
                     //返回主线程处理执行重连
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        __strong typeof(weakSelf) strongSelfMain = weakSelf;
+                        if(!strongSelfMain.delegate) return;
                         //调用重连处理
-                        if(wSelf.delegate && [wSelf.delegate respondsToSelector:@selector(pushSocket:withStartReconnect:)]){
-                            [wSelf.delegate pushSocket:self withStartReconnect:YES];
+                        if([strongSelfMain.delegate respondsToSelector:@selector(pushSocket:withStartReconnect:)]){
+                            [strongSelfMain.delegate pushSocket:self withStartReconnect:YES];
                         }
                     });
                 });
@@ -83,7 +86,7 @@
             NSLog(@"获取心跳间隔时间失败!");
             return;
         }
-        __weak __typeof(self) wSelf = self;
+        __weak typeof(self) weakSelf = self;
         NSUInteger rate = conf.rate;
         //心跳队列
         dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_PING_NAME, DISPATCH_QUEUE_SERIAL);
@@ -93,8 +96,9 @@
         dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, rate * NSEC_PER_SEC), rate * NSEC_PER_SEC, 0);
         //业务处理
         dispatch_source_set_event_handler(timer, ^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
             //判断是否已停止
-            if(!wSelf.isStart || !wSelf.isRun){
+            if(!strongSelf.isStart || !strongSelf.isRun){
                 dispatch_source_cancel(timer);//停止心跳线程
                 onceToken = 0;
                 NSLog(@"socket已停止服务,心跳定时线程停止!");
@@ -102,15 +106,16 @@
             }
             //判断是否需要心跳处理
             NSTimeInterval current = [NSDate date].timeIntervalSince1970;
-            if(current - wSelf.lastIdleTime < rate){
+            if(current - strongSelf.lastIdleTime < rate){
                 return;
             }
             //执行心跳处理
             dispatch_async(dispatch_get_main_queue(), ^{
+                __strong typeof(weakSelf) strongSelfMain = weakSelf;
                 NSLog(@"socket-发送心跳请求...");
-                if(!wSelf.getEncoder) return;
-                [wSelf.getEncoder encoderPingRequestWithConfig:wSelf.getConfig handler:^(NSData *buf) {
-                    [wSelf sendRequestWithData:buf];
+                if(!strongSelfMain.getEncoder) return;
+                [strongSelfMain.getEncoder encoderPingRequestWithConfig:strongSelfMain.getConfig handler:^(NSData *buf) {
+                    [strongSelfMain sendRequestWithData:buf];
                 }];
             });
             //判断心跳时间是否被重置
@@ -120,8 +125,9 @@
                 onceToken = 0;
                 //主线程重启心跳调用
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    __strong typeof(weakSelf) strongSelfMainPing = weakSelf;
                     //重启心跳
-                    [wSelf startPingHandler];
+                    [strongSelfMainPing startPingHandler];
                 });
             }
         });

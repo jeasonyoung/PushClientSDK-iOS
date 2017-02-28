@@ -50,18 +50,19 @@
         return;
     }
     //发送推送消息到达请求消息
-    __weak typeof(self) wSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.getEncoder encoderPublishAckRequestWithConfig:self.getConfig andPushId:data.pushId handler:^(NSData *buf) {
-        __strong typeof(wSelf)strongSelf =  wSelf;
+        __strong typeof(weakSelf)strongSelf = weakSelf;
         [strongSelf sendRequestWithData:buf];
     }];
     //推送消息抛出到主线程处理
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf)strongSelf = weakSelf;
         //检查是否设置了代理
-        if(!wSelf.delegate)return;
+        if(!strongSelf.delegate)return;
         //检查代理是否实现了方法
-        if([wSelf.delegate respondsToSelector:@selector(pushSocket:withPublish:)]){
-            [wSelf.delegate pushSocket:self withPublish:data];
+        if([strongSelf.delegate respondsToSelector:@selector(pushSocket:withPublish:)]){
+            [strongSelf.delegate pushSocket:self withPublish:data];
         }
     });
 }

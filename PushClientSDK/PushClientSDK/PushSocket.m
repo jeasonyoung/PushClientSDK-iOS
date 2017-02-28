@@ -70,11 +70,12 @@
         return;
     }
     //发送连接请求
-    __weak __typeof(self) wSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.getEncoder encoderConnectWithConfig:_config handler:^(NSData *data) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         NSLog(@"socket发送connectRequest请求...");
         //发送消息
-        [wSelf sendRequestWithData:data];
+        [strongSelf sendRequestWithData:data];
     }];
 }
 #pragma mark -- 连接失败或断开连接调用
@@ -177,9 +178,10 @@
     }
     _config = conf;//替换
     //发起请求消息
-    __weak __typeof(self) wSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.getEncoder encoderSubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
-        [wSelf sendRequestWithData:buf];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf sendRequestWithData:buf];
     }];
 }
 #pragma mark -- 清除用户标签处理
@@ -198,9 +200,10 @@
     }
     _config = conf;//替换
     //发起请求消息
-    __weak __typeof(self) wSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.getEncoder encoderUnsubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
-        [wSelf sendRequestWithData:buf];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf sendRequestWithData:buf];
     }];
 }
 #pragma mark -- 停止
@@ -212,9 +215,10 @@
         return;
     }
     //发起请求消息
-    __weak __typeof(self) wSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.getEncoder encoderDisconnectWithConfig:self.getConfig handler:^(NSData * buf){
-        [wSelf sendRequestWithData:buf];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf sendRequestWithData:buf];
     }];
 }
 
@@ -236,14 +240,15 @@
 
 #pragma mark -- 异常消息处理
 -(void)throwsErrorWithMessageType:(PushSocketMessageType)type andError:(NSError *)error{
-    __weak __typeof(self) wSelf = self;
+    __weak typeof(self) weakSelf = self;
     //主线程处理
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         //检查是否有代理
-        if(!wSelf.delegate)return;
+        if(!strongSelf.delegate)return;
         //检查是否实现了代理函数
-        if([wSelf.delegate respondsToSelector:@selector(pushSocket:withMessageType:throwsError:)]){
-            [wSelf.delegate pushSocket:self withMessageType:type throwsError:error];
+        if([strongSelf.delegate respondsToSelector:@selector(pushSocket:withMessageType:throwsError:)]){
+            [strongSelf.delegate pushSocket:self withMessageType:type throwsError:error];
         }
     });
 }
