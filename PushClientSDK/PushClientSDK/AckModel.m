@@ -43,7 +43,7 @@ static NSString * const MODEL_MSG    = @"msg";
 }
 
 -(NSString *)description{
-    return [NSString stringWithFormat:@"type:%ld,result:%ld,msg:%@", self.type, self.result, self.msg];
+    return [NSString stringWithFormat:@"type:%zd,result:%zd,msg:%@", self.type, self.result, self.msg];
 }
 
 

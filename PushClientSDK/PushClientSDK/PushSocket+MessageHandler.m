@@ -15,14 +15,14 @@
 #pragma mark -- 接收反馈数据处理。
 -(void)receiveAckHandler:(AckModel *)ack{
     if(ack.result == AckModelResultSuccess){
-        NSLog(@"socket发送(%ld)请求反馈成功!", ack.type);
+        NSLog(@"socket发送(%zd)请求反馈成功!", ack.type);
         if(ack.type == PushSocketMessageTypeConnack){//判断是否为连接成功应答
             NSLog(@"socket客户端准备开启心跳处理...");
             [self startPingHandler];
         }
         return;
     }
-    NSLog(@"socket发送(%ld)请求失败(%ld)=>%@", ack.type, ack.result, ack.msg);
+    NSLog(@"socket发送(%zd)请求失败(%zd)=>%@", ack.type, ack.result, ack.msg);
     [self stop];//停止服务
     [self throwsErrorWithMessageType:ack.type andMessage:ack.msg];
 }

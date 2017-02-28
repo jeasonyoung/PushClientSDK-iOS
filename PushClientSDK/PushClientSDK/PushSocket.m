@@ -104,7 +104,7 @@
 
 #pragma mark -- CodecDecoderDelegate
 -(void)decoderWithType:(PushSocketMessageType)type andAckModel:(id)model{
-    NSLog(@"decoderWithType(%ld)andAckModel=>%@",type,model);
+    NSLog(@"decoderWithType(%zd)andAckModel=>%@",type,model);
     switch (type) {
         case PushSocketMessageTypePingresp:{//心跳请求应答:
             [self receivePingAckHandler:model];
@@ -221,7 +221,7 @@
 #pragma mark -- 发送请求数据。
 -(void)sendRequestWithData:(NSData *)data{
     if(!data || !data.length || !_socket)return;
-    NSLog(@"socket开始发送请求数据(%ld)....", data.length);
+    NSLog(@"socket开始发送请求数据(%zd)....", data.length);
     [_socket writeData:data withTimeout:-1 tag:0];
     if(self.isStart){
         [_socket readDataWithTimeout:-1 tag:0];

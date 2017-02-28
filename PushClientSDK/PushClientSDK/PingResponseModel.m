@@ -39,7 +39,7 @@ static NSString * const PARAMS_AFTERCONNECT = @"afterConnect";
 }
 
 -(NSString *)description{
-    return [NSString stringWithFormat:@"{\"%@\":%ld,\"%@\":%ld}",
+    return [NSString stringWithFormat:@"{\"%@\":%zd,\"%@\":%zd}",
             PARAMS_HEARTRATE,self.heartRate,PARAMS_AFTERCONNECT,self.afterConnect];
 }
 

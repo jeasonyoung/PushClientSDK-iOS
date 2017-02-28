@@ -49,7 +49,7 @@
 #pragma mark -- 消息编码
 -(NSData *)encodeWithHeader:(FixedHeader *)header andPayload:(NSString *)json{
     if(!header) return nil;
-    NSLog(@"发送[%ld]请求消息=>\n%@", header.type, json);
+    NSLog(@"发送[%zd]请求消息=>\n%@", header.type, json);
     //消息体JSON转换
     NSData *body = nil;
     if(json && json.length){

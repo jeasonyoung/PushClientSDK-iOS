@@ -40,7 +40,7 @@ static NSUInteger const HEAD_DATA_MIN_LEN = 5;
     if(!source || !source.length) return;
     if(!_header){//消息头处理
         if(source.length < HEAD_DATA_MIN_LEN){
-            NSLog(@"decoderWithAppendData-数据最小长度应大于%ld!", HEAD_DATA_MIN_LEN);
+            NSLog(@"decoderWithAppendData-数据最小长度应大于%zd!", HEAD_DATA_MIN_LEN);
             return;
         }
         NSUInteger index = 0;
@@ -105,12 +105,12 @@ static NSUInteger const HEAD_DATA_MIN_LEN = 5;
     if(payload && payload.length){
         //转换为JSON字符串。
         json = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
-        NSLog(@"decoder[%ld]=>\n%@", header.type, json);
+        NSLog(@"decoder[%zd]=>\n%@", header.type, json);
     }
     //解析消息体
     switch (header.type) {
         case PushSocketMessageTypeNone://未知消息
-            NSLog(@"decoderMessageWithHeader:andPayload-未知消息类型=>%ld", header.type);
+            NSLog(@"decoderMessageWithHeader:andPayload-未知消息类型=>%zd", header.type);
             break;
         case PushSocketMessageTypeConnack://连接请求应答
         case PushSocketMessageTypePubrel://推送消息达到请求应答
@@ -132,7 +132,7 @@ static NSUInteger const HEAD_DATA_MIN_LEN = 5;
             break;
         }
         default:{
-            NSLog(@"decoderMessageWithHeader:andPayload-消息类型不在处理范围内(%ld)!", header.type);
+            NSLog(@"decoderMessageWithHeader:andPayload-消息类型不在处理范围内(%zd)!", header.type);
             break;
         }
     }

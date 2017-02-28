@@ -143,7 +143,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
             [self startSocketClient];
         }else{
             NSString *message = responseObject[@"message"];
-            [self sendErrorWithType:PushClientSDKErrorTypeSrvConf message:[NSString stringWithFormat:@"%ld-%@", result, message]];
+            [self sendErrorWithType:PushClientSDKErrorTypeSrvConf message:[NSString stringWithFormat:@"%zd-%@", result, message]];
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"网络异常=>%@", error);
@@ -200,7 +200,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 异常消息处理
 -(void)pushSocket:(PushSocket *)socket withMessageType:(PushSocketMessageType)type throwsError:(NSError *)error{
-    NSLog(@"pushSocket:%@,type:%ld,error:%@", socket, type, error);
+    NSLog(@"pushSocket:%@,type:%zd,error:%@", socket, type, error);
     [self sendErrorWithType:PushClientSDKErrorTypeConnect message:error.description];
 }
 
@@ -222,7 +222,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 发送错误消息处理
 -(void)sendErrorWithType:(PushClientSDKErrorType)type message:(NSString *)msg{
-    NSLog(@"发生错误异常(%ld):%@", type, msg);
+    NSLog(@"发生错误异常(%zd):%@", type, msg);
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withErrorType:andMessageDesc:)]){
         [self.delegate pushClientSDK:self withErrorType:type andMessageDesc:msg];
     }

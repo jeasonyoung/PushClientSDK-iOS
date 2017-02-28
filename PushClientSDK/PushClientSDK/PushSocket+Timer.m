@@ -31,7 +31,7 @@
         NSUInteger reconnectSleep = conf.reconnect, reconnectMaxTotals = conf.times;
         if(!reconnectSleep || !reconnectMaxTotals){
             onceToken = 0;
-            NSLog(@"restartConnectHandler(reconnect:%ld,times:%ld)-参数错误!", reconnectSleep, reconnectMaxTotals);
+            NSLog(@"restartConnectHandler(reconnect:%zd,times:%zd)-参数错误!", reconnectSleep, reconnectMaxTotals);
             return;
         }
         __weak typeof(self) wSelf = self;

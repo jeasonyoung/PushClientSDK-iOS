@@ -31,7 +31,7 @@ static NSString * const PARAMS_RECONNECT = @"reconnect";
 #pragma mark -- 设置心跳时间间隔(秒)
 -(void)setRate:(NSUInteger)rate{
     if(_rate != rate && rate > 0){
-        NSLog(@"重置心跳时间间隔(%ld)=>%ld", _rate, rate);
+        NSLog(@"重置心跳时间间隔(%zd)=>%zd", _rate, rate);
         _rate = rate;
     }
 }
@@ -39,7 +39,7 @@ static NSString * const PARAMS_RECONNECT = @"reconnect";
 #pragma mark -- 设置重连时间间隔(秒)
 -(void)setReconnect:(NSUInteger)reconnect{
     if(_reconnect != reconnect && reconnect > 0){
-        NSLog(@"重置重连时间(%ld)=>%ld", _reconnect, reconnect);
+        NSLog(@"重置重连时间(%zd)=>%zd", _reconnect, reconnect);
         _reconnect = reconnect;
     }
 }
