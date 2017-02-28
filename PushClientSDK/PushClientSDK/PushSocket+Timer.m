@@ -34,7 +34,7 @@
             NSLog(@"restartConnectHandler(reconnect:%zd,times:%zd)-参数错误!", reconnectSleep, reconnectMaxTotals);
             return;
         }
-        __weak typeof(self) wSelf = self;
+        __weak __typeof(self) wSelf = self;
         //重连队列
         dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_SERIAL);
         //启动异步线程
@@ -83,7 +83,7 @@
             NSLog(@"获取心跳间隔时间失败!");
             return;
         }
-        __weak typeof(self) wSelf = self;
+        __weak __typeof(self) wSelf = self;
         NSUInteger rate = conf.rate;
         //心跳队列
         dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_PING_NAME, DISPATCH_QUEUE_SERIAL);

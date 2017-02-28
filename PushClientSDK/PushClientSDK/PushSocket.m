@@ -70,7 +70,7 @@
         return;
     }
     //发送连接请求
-    __weak typeof(self) wSelf = self;
+    __weak __typeof(self) wSelf = self;
     [self.getEncoder encoderConnectWithConfig:_config handler:^(NSData *data) {
         NSLog(@"socket发送connectRequest请求...");
         //发送消息
@@ -177,7 +177,7 @@
     }
     _config = conf;//替换
     //发起请求消息
-    __weak typeof(self) wSelf = self;
+    __weak __typeof(self) wSelf = self;
     [self.getEncoder encoderSubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
@@ -198,7 +198,7 @@
     }
     _config = conf;//替换
     //发起请求消息
-    __weak typeof(self) wSelf = self;
+    __weak __typeof(self) wSelf = self;
     [self.getEncoder encoderUnsubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
@@ -212,7 +212,7 @@
         return;
     }
     //发起请求消息
-    __weak typeof(self) wSelf = self;
+    __weak __typeof(self) wSelf = self;
     [self.getEncoder encoderDisconnectWithConfig:self.getConfig handler:^(NSData * buf){
         [wSelf sendRequestWithData:buf];
     }];
@@ -236,7 +236,7 @@
 
 #pragma mark -- 异常消息处理
 -(void)throwsErrorWithMessageType:(PushSocketMessageType)type andError:(NSError *)error{
-    __weak typeof(self) wSelf = self;
+    __weak __typeof(self) wSelf = self;
     //主线程处理
     dispatch_async(dispatch_get_main_queue(), ^{
         //检查是否有代理

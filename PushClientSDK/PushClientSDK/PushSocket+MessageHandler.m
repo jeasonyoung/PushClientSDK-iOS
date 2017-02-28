@@ -50,7 +50,7 @@
         return;
     }
     //发送推送消息到达请求消息
-    __weak typeof(self) wSelf = self;
+    __weak __typeof(self) wSelf = self;
     [self.getEncoder encoderPublishAckRequestWithConfig:self.getConfig andPushId:data.pushId handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
