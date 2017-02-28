@@ -64,14 +64,14 @@
 #pragma mark -- 连接成功调用
 -(void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
     NSLog(@"socket(%@:%d)连接服务器成功!", host, port);
-    if(!_isRun)_isRun = YES;//连接成功
-    if(!_config){
+    if(!self.isRun)_isRun = YES;//连接成功
+    if(!self.getConfig){
         [self throwsErrorWithMessageType:PushSocketMessageTypeConnect andMessage:@"获取配置数据失败!"];
         return;
     }
     //发送连接请求
     __weak typeof(self) wSelf = self;
-    [_encoder encoderConnectWithConfig:_config handler:^(NSData *data) {
+    [self.getEncoder encoderConnectWithConfig:_config handler:^(NSData *data) {
         NSLog(@"socket发送connectRequest请求...");
         //发送消息
         [wSelf sendRequestWithData:data];
@@ -178,7 +178,7 @@
     _config = conf;//替换
     //发起请求消息
     __weak typeof(self) wSelf = self;
-    [_encoder encoderSubscribeWithConfig:_config handler:^(NSData *buf) {
+    [self.getEncoder encoderSubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
 }
@@ -199,7 +199,7 @@
     _config = conf;//替换
     //发起请求消息
     __weak typeof(self) wSelf = self;
-    [_encoder encoderUnsubscribeWithConfig:_config handler:^(NSData *buf) {
+    [self.getEncoder encoderUnsubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
 }
@@ -213,7 +213,7 @@
     }
     //发起请求消息
     __weak typeof(self) wSelf = self;
-    [_encoder encoderDisconnectWithConfig:_config handler:^(NSData * buf){
+    [self.getEncoder encoderDisconnectWithConfig:self.getConfig handler:^(NSData * buf){
         [wSelf sendRequestWithData:buf];
     }];
 }
@@ -236,10 +236,16 @@
 
 #pragma mark -- 异常消息处理
 -(void)throwsErrorWithMessageType:(PushSocketMessageType)type andError:(NSError *)error{
-    if(!self.delegate) return;
-    if([self.delegate respondsToSelector:@selector(pushSocket:withMessageType:throwsError:)]){
-        [self.delegate pushSocket:self withMessageType:type throwsError:error];
-    }
+    __weak typeof(self) wSelf = self;
+    //主线程处理
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //检查是否有代理
+        if(!wSelf.delegate)return;
+        //检查是否实现了代理函数
+        if([wSelf.delegate respondsToSelector:@selector(pushSocket:withMessageType:throwsError:)]){
+            [wSelf.delegate pushSocket:self withMessageType:type throwsError:error];
+        }
+    });
 }
 
 #pragma mark -- 内部方法

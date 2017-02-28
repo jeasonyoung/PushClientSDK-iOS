@@ -47,11 +47,13 @@ typedef NS_ENUM(NSInteger, PushClientSDKErrorType){
 /**
  * @brief 接收推送消息。
  * @param sdk SDK实例对象。
+ * @param isApns 是否为APNs消息。
  * @param title 接收推送消息标题。
  * @param content 推送消息内容。
  * @param data 完整的推送消息。
  **/
 -(void)pushClientSDK:(PushClientSDK *)sdk
+          withIsApns:(BOOL)isApns
 receivePushMessageTitle:(NSString *)title
    andMessageContent:(NSString *)content
      withFullPublish:(PublishModel *)data;
@@ -100,5 +102,11 @@ receivePushMessageTitle:(NSString *)title
  * @brief 关闭推送客户端。
  **/
 -(void)close;
+
+/**
+ * @brief 接收APNs远程推送消息。
+ * @param userInfo 接收到的数据。
+ **/
+-(void)receiveRemoteNotification:(NSDictionary *)userInfo;
 
 @end

@@ -60,9 +60,13 @@
     }else{
         header.remainingLength = 0;
     }
-    NSUInteger capacity = [self calcHeaderSizeWithPayload:(header.remainingLength)] + 1;
+    NSInteger size = [self calcHeaderSizeWithPayload:(header.remainingLength)];
+    if(size == -1){
+        NSLog(@"encodeWithHeader:andPayload:-消息长度超过规定的字节长度!=>\n%@",json);
+        return nil;
+    }
     //初始化消息数据对象
-    NSMutableData *data = [NSMutableData dataWithCapacity:capacity];
+    NSMutableData *data = [NSMutableData dataWithCapacity:(size + 1)];
     //编码消息头
     [self writeHeaderWithData:&data withHeader:header];
     //编码消息体
@@ -74,14 +78,14 @@
 }
 
 #pragma mark -- 计算消息长度所占字节长度
--(NSUInteger)calcHeaderSizeWithPayload:(NSUInteger)length{
-    if(length == 0) return 1;
-    NSUInteger count = 0, num = length;
-    do{
-        num /= 128;
-        count += 1;
-    }while(num > 0);
-    return count;
+-(NSInteger)calcHeaderSizeWithPayload:(NSUInteger)length{
+    NSInteger size = 1, len =  length >> 7;
+    while(len > 0){
+        len = len >> 7;
+        size++;
+    };
+    if(size > 4) return -1;
+    return size;
 }
 
 #pragma mark -- 写入消息头
@@ -107,8 +111,8 @@
         return;
     }
     do{
-        unsigned short digit = num % 128;
-        num /= 128;
+        unsigned short digit = (num & 0x7f);
+        num = num >> 7;
         if(num > 0){
             digit |= 0x80;
         }
@@ -145,11 +149,11 @@
             return nil;
         }
         //转换为十进制
-        remainingLength += (digit & 127) * multiplier;
+        remainingLength += (digit & 0x7f) * multiplier;
         multiplier *= 128;
         //计数，最多4个字节表示长度
         loops++;
-    }while(((digit & 128) != 0) && loops < 4);
+    }while(((digit & 0x80) != 0) && loops < 4);
     if(loops >= 4 && (digit & 128) != 0){
         NSLog(@"消息长度大于4个字节，不符合通讯协议!");
         return nil;

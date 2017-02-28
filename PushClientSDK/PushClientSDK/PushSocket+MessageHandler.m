@@ -54,10 +54,14 @@
     [self.getEncoder encoderPublishAckRequestWithConfig:self.getConfig andPushId:data.pushId handler:^(NSData *buf) {
         [wSelf sendRequestWithData:buf];
     }];
-    //推送消息抛出处理
-    if(self.delegate && [self.delegate respondsToSelector:@selector(pushSocket:withPublish:)]){
-        [self.delegate pushSocket:self withPublish:data];
-    }
+    //推送消息抛出到主线程处理
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //检查是否设置了代理
+        if(!wSelf.delegate)return;
+        //检查代理是否实现了方法
+        if([wSelf.delegate respondsToSelector:@selector(pushSocket:withPublish:)]){
+            [wSelf.delegate pushSocket:self withPublish:data];
+        }
+    });
 }
-
 @end

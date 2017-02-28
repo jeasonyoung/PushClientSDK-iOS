@@ -30,16 +30,16 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 单例
 +(instancetype)sharedInstance{
-    static PushClientSDK *instance = nil;
+    static PushClientSDK *_instance;
     //
-    static dispatch_once_t once;
-    dispatch_once(&once, ^{
-        instance = [[PushClientSDK alloc] init];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _instance = [[PushClientSDK alloc] init];
     });
-    return instance;
+    return _instance;
 }
 
-//初始化函数
+#pragma mark -- 初始化。
 -(instancetype)init{
     if(self = [super init]){
         _accessData = [AccessData sharedAccess];//初始化访问数据
@@ -48,6 +48,8 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     }
     return self;
 }
+
+#pragma mark -- 公开方法
 
 #pragma mark -- 启动推送
 -(void)startHost:(NSString *)host
@@ -88,6 +90,41 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     [self accessHttpServer];
 }
 
+#pragma mark -- 添加或更改用户标签
+-(void)addOrChangedTag:(NSString *)tag{
+    NSLog(@"addOrChangedTag=>%@", tag);
+    if(!tag || !tag.length) return;
+    [_accessData addOrUpdateDeviceUserWithTag:tag];
+    if(_socket){
+        [_socket addOrChangedTagHandler];
+    }
+}
+
+#pragma mark -- 清除用户标签
+-(void)clearTag{
+    NSLog(@"clear...");
+    [_accessData addOrUpdateDeviceUserWithTag:nil];
+    if(_socket){
+        [_socket clearTagHandler];
+    }
+}
+
+#pragma mark -- 关闭推送客户端
+-(void)close{
+    NSLog(@"close...");
+    [self stopSocketClient];
+}
+
+
+#pragma mark -- 接收远程推送消息。
+-(void)receiveRemoteNotification:(NSDictionary *)userInfo{
+    if(!userInfo || !userInfo.count) return;
+    PublishModel *model = [[PublishModel alloc] initWithData:userInfo];
+    [self pushwithPublish:model];
+}
+
+#pragma mark -- 内部方法。
+
 #pragma mark -- 访问HTTP服务器获取配置
 -(void)accessHttpServer{
     //构建参数集合
@@ -114,31 +151,6 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     }];
 }
 
-#pragma mark -- 添加或更改用户标签
--(void)addOrChangedTag:(NSString *)tag{
-    NSLog(@"addOrChangedTag=>%@", tag);
-    if(!tag || !tag.length) return;
-    [_accessData addOrUpdateDeviceUserWithTag:tag];
-    if(_socket){
-        [_socket addOrChangedTagHandler];
-    }
-}
-
-#pragma mark -- 清除用户标签
--(void)clearTag{
-    NSLog(@"clear...");
-    [_accessData addOrUpdateDeviceUserWithTag:nil];
-    if(_socket){
-        [_socket clearTagHandler];
-    }
-}
-
-#pragma mark -- 关闭推送客户端
--(void)close{
-    NSLog(@"close...");
-    [self stopSocketClient];
-}
-
 #pragma mark -- 启动socket客户端
 -(void)startSocketClient{
     NSLog(@"startSocketClient...");
@@ -157,23 +169,10 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     }
 }
 
-#pragma mark -- socket delegate
-//获取socket配置数据
--(void)pushSocket:(PushSocket *)socket withAccessConfig:(AccessData *__autoreleasing *)config{
-    NSLog(@"pushSocket:%@,withSocketConfig:%@", socket, *config);
-    if(_accessData && _accessData.socket){
-        *config = _accessData;
-    }
-}
-//异常消息处理
--(void)pushSocket:(PushSocket *)socket withMessageType:(PushSocketMessageType)type throwsError:(NSError *)error{
-    NSLog(@"pushSocket:%@,type:%ld,error:%@", socket, type, error);
-    [self sendErrorWithType:PushClientSDKErrorTypeConnect message:error.description];
-}
-//推送消息
--(void)pushSocket:(PushSocket *)socket withPublish:(PublishModel *)publish{
+#pragma mark -- 抛出推送消息
+-(void)pushwithPublish:(PublishModel *)publish{
     if(!publish)return;
-    if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
+    if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withIsApns:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
         NSString *title = nil;
         id alert = publish.apns ? publish.apns.alert : nil;
         if(alert && [alert isKindOfClass:[NSString class]]){
@@ -181,14 +180,36 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
         }else if(alert && [alert isKindOfClass:[PublishAlertModel class]]){
             title = ((PublishAlertModel *)alert).body;
         }
-        //
         [self.delegate pushClientSDK:self
+                          withIsApns:NO
              receivePushMessageTitle:title
                    andMessageContent:publish.content
                      withFullPublish:publish];
     }
 }
-//重新连接。
+
+#pragma mark -- socket delegate
+
+#pragma mark -- 获取socket配置数据
+-(void)pushSocket:(PushSocket *)socket withAccessConfig:(AccessData *__autoreleasing *)config{
+    NSLog(@"pushSocket:%@,withSocketConfig:%@", socket, *config);
+    if(_accessData && _accessData.socket){
+        *config = _accessData;
+    }
+}
+
+#pragma mark -- 异常消息处理
+-(void)pushSocket:(PushSocket *)socket withMessageType:(PushSocketMessageType)type throwsError:(NSError *)error{
+    NSLog(@"pushSocket:%@,type:%ld,error:%@", socket, type, error);
+    [self sendErrorWithType:PushClientSDKErrorTypeConnect message:error.description];
+}
+
+#pragma mark -- 推送消息处理
+-(void)pushSocket:(PushSocket *)socket withPublish:(PublishModel *)publish{
+    [self pushwithPublish:publish];
+}
+
+#pragma mark -- 重新连接处理
 -(void)pushSocket:(PushSocket *)socket withStartReconnect:(BOOL)reconnect{
     NSLog(@"重新连接=>%d", reconnect);
     if(reconnect){
