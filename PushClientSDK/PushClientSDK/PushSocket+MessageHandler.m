@@ -50,9 +50,10 @@
         return;
     }
     //发送推送消息到达请求消息
-    __weak __typeof(self) wSelf = self;
+    __weak typeof(self) wSelf = self;
     [self.getEncoder encoderPublishAckRequestWithConfig:self.getConfig andPushId:data.pushId handler:^(NSData *buf) {
-        [wSelf sendRequestWithData:buf];
+        __strong typeof(wSelf)strongSelf =  wSelf;
+        [strongSelf sendRequestWithData:buf];
     }];
     //推送消息抛出到主线程处理
     dispatch_async(dispatch_get_main_queue(), ^{
