@@ -82,7 +82,7 @@ NSString * const PARAMS_SIGN    = @"sign";
     [str appendString:token];
     NSString *sign = [str md5];
     NSLog(@"md5前字符串-2(sign:%@)=>%@", sign, str);
-    return str;
+    return sign;
 }
 
 
