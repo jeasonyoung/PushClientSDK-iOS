@@ -132,7 +132,12 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     //网络请求处理
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    AFJSONResponseSerializer *jsonResponseSerializer = [AFJSONResponseSerializer serializer];
+    jsonResponseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",
+                                                                          @"text/json",
+                                                                          @"text/javascript",
+                                                                          @"text/html",nil];
+    manager.responseSerializer = jsonResponseSerializer;
     [manager POST:_accessData.url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         NSLog(@"获取推送socket服务器数据成功:%@", responseObject);
         NSInteger result  = [responseObject[@"result"] integerValue];
