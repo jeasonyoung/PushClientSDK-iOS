@@ -36,7 +36,7 @@
         }
         __weak typeof(self) weakSelf = self;
         //重连队列
-        dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_CONCURRENT);
         //启动异步线程
         dispatch_async(queue, ^{
             //启动执行次数
@@ -53,7 +53,7 @@
                         onceToken = 0;
                         return;
                     }
-                    NSLog(@"restartConnectHandler-重连次数(%ld)=>(start:%d,run:%d)", index, strongSelf.isStart, strongSelf.isRun);
+                    NSLog(@"restartConnectHandler-重连次数(%ld)=>(start:%d,run:%d)", (index + 1), strongSelf.isStart, strongSelf.isRun);
                     //返回主线程处理执行重连
                     dispatch_async(dispatch_get_main_queue(), ^{
                         __strong typeof(weakSelf) strongSelfMain = weakSelf;
