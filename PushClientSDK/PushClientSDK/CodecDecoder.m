@@ -50,7 +50,7 @@ static NSUInteger const HEAD_DATA_MIN_LEN = 5;
             return;
         }
         //剩余的消息长度
-        NSUInteger available = source.length - index;
+        NSUInteger available = source.length - (index + 1);
         if(available > 0){
             NSData *data = [source subdataWithRange:NSMakeRange(index + 1, available)];
             if(_header.remainingLength > 0){//有消息体，递归处理
