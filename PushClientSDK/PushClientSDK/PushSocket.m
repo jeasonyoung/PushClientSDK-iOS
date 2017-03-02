@@ -95,6 +95,8 @@
     _lastIdleTime = [NSDate date].timeIntervalSince1970;
     //解码处理
     [_decoder decoderWithAppendData:data];
+    //启动循环读取数据
+    [sock readDataWithTimeout:-1 tag:0];
 }
 #pragma mark -- 写入数据
 -(void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
