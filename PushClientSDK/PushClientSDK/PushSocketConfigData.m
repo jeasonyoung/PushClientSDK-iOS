@@ -9,11 +9,11 @@
 #import "PushSocketConfigData.h"
 #import "NSString+PushExtTools.h"
 
-static NSString * const PARAMS_SERVER = @"serverIP";
-static NSString * const PARAMS_PORT   = @"port";
-static NSString * const PARAMS_RATE   = @"rate";
-static NSString * const PARAMS_TIMES  = @"times";
-static NSString * const PARAMS_RECONNECT = @"reconnect";
+static NSString * const PUSH_PARAMS_SERVER = @"serverIP";
+static NSString * const PUSH_PARAMS_PORT   = @"port";
+static NSString * const PUSH_PARAMS_RATE   = @"rate";
+static NSString * const PUSH_PARAMS_TIMES  = @"times";
+static NSString * const PUSH_PARAMS_RECONNECT = @"reconnect";
 
 //实现
 @implementation PushSocketConfigData
@@ -21,11 +21,11 @@ static NSString * const PARAMS_RECONNECT = @"reconnect";
 #pragma mark -- 初始化数据
 -(void)initialConfigWithDict:(NSDictionary *)dict{
     if(!dict || !dict.count) return;
-    _server = dict[PARAMS_SERVER];//1.socket服务器IP
-    _port = [dict[PARAMS_PORT] unsignedIntegerValue];//2.socket服务器端口
-    _rate = [dict[PARAMS_RATE] unsignedIntegerValue];//3.socket心跳间隔(秒)
-    _times = [dict[PARAMS_TIMES] unsignedIntegerValue];//4.socket丢失心跳间隔次数
-    _reconnect = [dict[PARAMS_RECONNECT] unsignedIntegerValue];//5.socket重连间隔(秒)
+    _server = dict[PUSH_PARAMS_SERVER];//1.socket服务器IP
+    _port = [dict[PUSH_PARAMS_PORT] unsignedIntegerValue];//2.socket服务器端口
+    _rate = [dict[PUSH_PARAMS_RATE] unsignedIntegerValue];//3.socket心跳间隔(秒)
+    _times = [dict[PUSH_PARAMS_TIMES] unsignedIntegerValue];//4.socket丢失心跳间隔次数
+    _reconnect = [dict[PUSH_PARAMS_RECONNECT] unsignedIntegerValue];//5.socket重连间隔(秒)
 }
 
 #pragma mark -- 设置心跳时间间隔(秒)
