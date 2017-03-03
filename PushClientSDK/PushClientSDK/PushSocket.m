@@ -11,12 +11,12 @@
 #import "PushSocket+Timer.h"
 
 #import "GCDAsyncSocket.h"
-#import "CodecDecoder.h"
+#import "PushCodecDecoder.h"
 
-#define DISPATCH_QUEUE_DQ_NAME "com.csblank.push.dq"
+#define PUSH_DISPATCH_QUEUE_DQ_NAME "com.csblank.push.dq"
 
 //成员变量
-@interface PushSocket ()<GCDAsyncSocketDelegate,CodecDecoderDelegate>{
+@interface PushSocket ()<GCDAsyncSocketDelegate,PushCodecDecoderDelegate>{
     /**
      * @brief socket通讯对象。
      **/
@@ -24,7 +24,7 @@
     /**
      * @brief 消息解码器。
      **/
-    CodecDecoder *_decoder;
+    PushCodecDecoder *_decoder;
 }
 
 @end
@@ -47,13 +47,13 @@
     if(self = [super init]){
         _isRun = _isStart = NO;
         //1.异步socket委托处理线程队列
-        dispatch_queue_t dq = dispatch_queue_create(DISPATCH_QUEUE_DQ_NAME, NULL);
+        dispatch_queue_t dq = dispatch_queue_create(PUSH_DISPATCH_QUEUE_DQ_NAME, NULL);
         //2.socket异步处理初始化
         _socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dq];
         //3.消息编码
-        _encoder = [[CodecEncoder alloc] init];
+        _encoder = [[PushCodecEncoder alloc] init];
         //4.消息解码
-        _decoder = [[CodecDecoder alloc] init];
+        _decoder = [[PushCodecDecoder alloc] init];
         //设置解码器委托
         _decoder.delegate = self;
     }
@@ -140,7 +140,7 @@
     _isStart = YES;//设置启动。
     NSLog(@"准备启动socket...");
     //获取配置
-    AccessData *conf = nil;
+    PushAccessData *conf = nil;
     if(![self loadWithConfig:&conf]){
         [self throwsErrorWithMessageType:PushSocketMessageTypeConnect andMessage:@"获取配置失败!"];
         return;
@@ -157,7 +157,7 @@
         _isRun = YES;//设置已启动
         //连接服务器
         NSError *err = nil;
-        SocketConfigData *cfg = conf.socket;
+        PushSocketConfigData *cfg = conf.socket;
         if(!(_isRun = [_socket connectToHost:cfg.server onPort:cfg.port error:&err])){
             [self throwsErrorWithMessageType:PushSocketMessageTypeConnect andError:err];
             return;
@@ -168,7 +168,7 @@
 -(void)addOrChangedTagHandler{
     NSLog(@"PushSocket-addOrChangedTagHandler...");
     //获取配置
-    AccessData *conf = nil;
+    PushAccessData *conf = nil;
     if(![self loadWithConfig:&conf]){
         [self throwsErrorWithMessageType:PushSocketMessageTypeSubscribe andMessage:@"获取配置失败!"];
         return;
@@ -190,7 +190,7 @@
 -(void)clearTagHandler{
     NSLog(@"PushSocket-clearTagHandler...");
     //获取配置
-    AccessData *conf = nil;
+    PushAccessData *conf = nil;
     if(![self loadWithConfig:&conf]){
         [self throwsErrorWithMessageType:PushSocketMessageTypeSubscribe andMessage:@"获取配置失败!"];
         return;
@@ -258,7 +258,7 @@
 #pragma mark -- 内部方法
 
 #pragma mark -- 获取配置
--(BOOL)loadWithConfig:(AccessData **)cfg{
+-(BOOL)loadWithConfig:(PushAccessData **)cfg{
     if(!self.delegate) return NO;
     if([self.delegate respondsToSelector:@selector(pushSocket:withAccessConfig:)]){
         [self.delegate pushSocket:self withAccessConfig:&(*cfg)];

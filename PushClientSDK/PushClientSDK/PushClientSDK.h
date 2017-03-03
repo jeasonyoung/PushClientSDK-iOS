@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PublishModel.h"
+#import "PushPublishModel.h"
 /**
  * @brief 错误类型枚举。
  **/
@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger, PushClientSDKErrorType){
           withIsApns:(BOOL)isApns
 receivePushMessageTitle:(NSString *)title
    andMessageContent:(NSString *)content
-     withFullPublish:(PublishModel *)data;
+     withFullPublish:(PushPublishModel *)data;
 
 @end
 

@@ -13,8 +13,8 @@
 @implementation PushSocket (MessageHandler)
 
 #pragma mark -- 接收反馈数据处理。
--(void)receiveAckHandler:(AckModel *)ack{
-    if(ack.result == AckModelResultSuccess){
+-(void)receiveAckHandler:(PushAckModel *)ack{
+    if(ack.result == PushAckModelResultSuccess){
         NSLog(@"socket发送(%zd)请求反馈成功!", ack.type);
         if(ack.type == PushSocketMessageTypeConnack){//判断是否为连接成功应答
             NSLog(@"socket客户端准备开启心跳处理...");
@@ -28,7 +28,7 @@
 }
 
 #pragma mark -- 接收心跳应答处理
--(void)receivePingAckHandler:(PingResponseModel *)pingAck{
+-(void)receivePingAckHandler:(PushPingResponseModel *)pingAck{
     NSLog(@"socket-心跳反馈处理=>%@", pingAck);
     if(!pingAck) return;
     if(pingAck.heartRate > 0 && self.getConfig && self.getConfig.socket){
@@ -40,7 +40,7 @@
 }
 
 #pragma mark -- 接收推送消息数据处理
--(void)receivePublishHandler:(PublishModel *)data{
+-(void)receivePublishHandler:(PushPublishModel *)data{
     if(!data){
         [self throwsErrorWithMessageType:PushSocketMessageTypePublish andMessage:@"推送消息解析失败!"];
         return;

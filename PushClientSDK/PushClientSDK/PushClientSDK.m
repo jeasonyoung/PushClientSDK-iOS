@@ -11,8 +11,8 @@
 #import "AFNetworking.h"
 
 
-#import "AccessData.h"
-#import "RequestData.h"
+#import "PushAccessData.h"
+#import "PushRequestData.h"
 #import "PushSocket.h"
 
 static NSString * const PUSH_SRV_URL_PREFIX = @"http";
@@ -20,7 +20,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 //构造函数
 @interface PushClientSDK ()<PushSocketHandlerDelegate>{
-    AccessData *_accessData;
+    PushAccessData *_accessData;
     PushSocket *_socket;
 }
 @end
@@ -42,7 +42,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 初始化。
 -(instancetype)init{
     if(self = [super init]){
-        _accessData = [AccessData sharedAccess];//初始化访问数据
+        _accessData = [PushAccessData sharedAccess];//初始化访问数据
         _socket = [PushSocket shareSocket];//初始化socket处理
         _socket.delegate = self;
     }
@@ -119,7 +119,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 接收远程推送消息。
 -(void)receiveRemoteNotification:(NSDictionary *)userInfo{
     if(!userInfo || !userInfo.count) return;
-    PublishModel *model = [[PublishModel alloc] initWithData:userInfo];
+    PushPublishModel *model = [[PushPublishModel alloc] initWithData:userInfo];
     [self pushwithPublish:model];
 }
 
@@ -128,7 +128,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 访问HTTP服务器获取配置
 -(void)accessHttpServer{
     //构建参数集合
-    NSDictionary *params = [[[RequestData alloc] initWithAccess:_accessData] toSignParameters];
+    NSDictionary *params = [[[PushRequestData alloc] initWithAccess:_accessData] toSignParameters];
     //网络请求处理
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -175,15 +175,15 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 }
 
 #pragma mark -- 抛出推送消息
--(void)pushwithPublish:(PublishModel *)publish{
+-(void)pushwithPublish:(PushPublishModel *)publish{
     if(!publish)return;
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withIsApns:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
         NSString *title = nil;
         id alert = publish.apns ? publish.apns.alert : nil;
         if(alert && [alert isKindOfClass:[NSString class]]){
             title = (NSString *)alert;
-        }else if(alert && [alert isKindOfClass:[PublishAlertModel class]]){
-            title = ((PublishAlertModel *)alert).body;
+        }else if(alert && [alert isKindOfClass:[PushPublishAlertModel class]]){
+            title = ((PushPublishAlertModel *)alert).body;
         }
         [self.delegate pushClientSDK:self
                           withIsApns:NO
@@ -196,7 +196,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- socket delegate
 
 #pragma mark -- 获取socket配置数据
--(void)pushSocket:(PushSocket *)socket withAccessConfig:(AccessData *__autoreleasing *)config{
+-(void)pushSocket:(PushSocket *)socket withAccessConfig:(PushAccessData *__autoreleasing *)config{
     NSLog(@"pushSocket:%@,withSocketConfig:%@", socket, *config);
     if(_accessData && _accessData.socket){
         *config = _accessData;
@@ -210,7 +210,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 }
 
 #pragma mark -- 推送消息处理
--(void)pushSocket:(PushSocket *)socket withPublish:(PublishModel *)publish{
+-(void)pushSocket:(PushSocket *)socket withPublish:(PushPublishModel *)publish{
     [self pushwithPublish:publish];
 }
 

@@ -9,9 +9,9 @@
 #import "PushSocket+Timer.h"
 
 //重连队列
-#define DISPATCH_QUEUE_RECONNECT_NAME "com.csblank.push.reconnect"
+#define PUSH_DISPATCH_QUEUE_RECONNECT_NAME "com.csblank.push.reconnect"
 //心跳队列
-#define DISPATCH_QUEUE_PING_NAME "com.csblank.push.ping"
+#define PUSH_DISPATCH_QUEUE_PING_NAME "com.csblank.push.ping"
 
 @implementation PushSocket (Timer)
 
@@ -21,7 +21,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //获取配置
-        SocketConfigData *conf = self.getConfig ? self.getConfig.socket : nil;
+        PushSocketConfigData *conf = self.getConfig ? self.getConfig.socket : nil;
         if(!conf || !conf.reconnect){
             onceToken = 0;
             NSLog(@"获取重连间隔时间失败!");
@@ -36,7 +36,7 @@
         }
         __weak typeof(self) weakSelf = self;
         //重连队列
-        dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_t queue = dispatch_queue_create(PUSH_DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_CONCURRENT);
         //启动异步线程
         dispatch_async(queue, ^{
             //启动执行次数
@@ -80,7 +80,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //获取配置
-        SocketConfigData *conf = self.getConfig ? self.getConfig.socket : nil;
+        PushSocketConfigData *conf = self.getConfig ? self.getConfig.socket : nil;
         if(!conf || !conf.rate){
             onceToken = 0;
             NSLog(@"获取心跳间隔时间失败!");
@@ -89,7 +89,7 @@
         __weak typeof(self) weakSelf = self;
         NSUInteger rate = conf.rate;
         //心跳队列
-        dispatch_queue_t queue = dispatch_queue_create(DISPATCH_QUEUE_PING_NAME, DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queue = dispatch_queue_create(PUSH_DISPATCH_QUEUE_PING_NAME, DISPATCH_QUEUE_SERIAL);
         //gcd定时器
         dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
         //设置时间间隔

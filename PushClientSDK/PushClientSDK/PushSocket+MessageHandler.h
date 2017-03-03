@@ -8,8 +8,8 @@
 
 #import "PushSocket.h"
 
-#import "AckModel.h"
-#import "PingResponseModel.h"
+#import "PushAckModel.h"
+#import "PushPingResponseModel.h"
 /**
  * 消息处理扩展
  **/
@@ -19,18 +19,18 @@
  * @brief 接收反馈数据处理。
  * @param ack 反馈数据模型对象。
  **/
--(void)receiveAckHandler:(AckModel *)ack;
+-(void)receiveAckHandler:(PushAckModel *)ack;
 
 /**
  * @brief 接收心跳应答数据处理。
  * @param pingAck 心跳应答数据。
  **/
--(void)receivePingAckHandler:(PingResponseModel *)pingAck;
+-(void)receivePingAckHandler:(PushPingResponseModel *)pingAck;
 
 /**
  * @brief 接收推送消息数据处理。
  * @param data 推送消息数据模型对象。
  **/
--(void)receivePublishHandler:(PublishModel *)data;
+-(void)receivePublishHandler:(PushPublishModel *)data;
 
 @end

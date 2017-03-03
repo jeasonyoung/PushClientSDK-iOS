@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AccessData.h"
+#import "PushAccessData.h"
 #import "PushSocketMessageType.h"
-#import "CodecEncoder.h"
+#import "PushCodecEncoder.h"
 
-#import "PublishModel.h"
+#import "PushPublishModel.h"
 
 @class PushSocket;
 /**
@@ -25,7 +25,7 @@
  * @param socket PushSocket实例。
  * @param config 配置数据。
  **/
--(void)pushSocket:(PushSocket *)socket withAccessConfig:(AccessData **)config;
+-(void)pushSocket:(PushSocket *)socket withAccessConfig:(PushAccessData **)config;
 
 /**
  * @brief socket异常处理。
@@ -40,7 +40,7 @@
  * @param socket pushSocket实例。
  * @param publish 推送消息。
  **/
--(void)pushSocket:(PushSocket *)socket withPublish:(PublishModel *)publish;
+-(void)pushSocket:(PushSocket *)socket withPublish:(PushPublishModel *)publish;
 
 /**
  * @brief 启动重连。
@@ -73,12 +73,12 @@
 /**
  * @brief 获取配置。
  **/
-@property(retain,atomic,readonly, getter=getConfig)AccessData *config;
+@property(retain,atomic,readonly, getter=getConfig)PushAccessData *config;
 
 /**
  * @brief 获取消息编码器。
  **/
-@property(retain,atomic,readonly, getter=getEncoder)CodecEncoder *encoder;
+@property(retain,atomic,readonly, getter=getEncoder)PushCodecEncoder *encoder;
 
 /**
  * @brief 代理属性。
