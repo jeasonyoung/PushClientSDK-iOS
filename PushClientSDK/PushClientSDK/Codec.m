@@ -17,6 +17,7 @@
         withRemainingLength:(NSUInteger)length{
     if(self = [super init]){
         _type = type;//1.消息类型
+        _isDup = NO;
         _qos = ack ? SocketMessageQosAck : SocketMessageQosNone;
         _isRetain = NO;
         _remainingLength = length;
@@ -68,7 +69,7 @@
     //初始化消息数据对象
     NSMutableData *data = [NSMutableData dataWithCapacity:(size + 1)];
     //编码消息头
-    [self writeHeaderWithData:&data withHeader:header];
+    [self writeHeadeWithData:&data withHeader:header];
     //编码消息体
     if(body && body.length){
         [data appendData:body];
@@ -89,7 +90,7 @@
 }
 
 #pragma mark -- 写入消息头
--(void)writeHeaderWithData:(NSMutableData **)data withHeader:(FixedHeader *)header{
+-(void)writeHeadeWithData:(NSMutableData **)data withHeader:(FixedHeader *)header{
     //第一个字节
     unsigned short ret = 0;
     //高四位
@@ -122,7 +123,7 @@
 }
 
 #pragma mark -- 解码消息头
--(FixedHeader *)decoderHeaderWithData:(NSData *)data withOutIndex:(NSUInteger *)index{
+-(FixedHeader *)decodeHeaderWithData:(NSData *)data withOutIndex:(NSUInteger *)index{
     //读取第一字节。
     unsigned char b1 = 0;
     [data getBytes:&b1 range:NSMakeRange(*index, 1)];
@@ -154,7 +155,7 @@
         //计数，最多4个字节表示长度
         loops++;
     }while(((digit & 0x80) != 0) && loops < 4);
-    if(loops >= 4 && (digit & 128) != 0){
+    if(loops >= 4 && (digit & 0x80) != 0){
         NSLog(@"消息长度大于4个字节，不符合通讯协议!");
         return nil;
     }

@@ -44,7 +44,7 @@ static NSUInteger const HEAD_DATA_MIN_LEN = 5;
             return;
         }
         NSUInteger index = 0;
-        _header = [self decoderHeaderWithData:source withOutIndex:&index];
+        _header = [self decodeHeaderWithData:source withOutIndex:&index];
         if(!_header){
             NSLog(@"解析消息头失败!");
             return;

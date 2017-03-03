@@ -99,6 +99,6 @@ typedef NS_ENUM(NSInteger,SocketMessageQos){
  * @param index 输出的数据索引。
  * @return 消息头对象。
  **/
--(FixedHeader *)decoderHeaderWithData:(NSData *)data withOutIndex:(NSUInteger *)index;
+-(FixedHeader *)decodeHeaderWithData:(NSData *)data withOutIndex:(NSUInteger *)index;
 
 @end
