@@ -114,7 +114,7 @@
                 __strong typeof(weakSelf) strongSelfMain = weakSelf;
                 NSLog(@"socket-发送心跳请求...");
                 if(!strongSelfMain.getEncoder) return;
-                [strongSelfMain.getEncoder encoderPingRequestWithConfig:strongSelfMain.getConfig handler:^(NSData *buf) {
+                [strongSelfMain.getEncoder encodePingRequestWithConfig:strongSelfMain.getConfig handler:^(NSData *buf) {
                     [strongSelfMain sendRequestWithData:buf];
                 }];
             });

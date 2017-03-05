@@ -25,7 +25,7 @@ typedef void (^PushCodecEncoderBlock)(NSData *);
  * @param config 配置数据。
  * @param block 编码处理block。
  **/
--(void)encoderConnectWithConfig:(PushAccessData *)config
+-(void)encodeConnectWithConfig:(PushAccessData *)config
                         handler:(PushCodecEncoderBlock)block;
 
 /**
@@ -34,7 +34,7 @@ typedef void (^PushCodecEncoderBlock)(NSData *);
  * @param pushId 推送ID。
  * @param block 编码处理block.
  **/
--(void)encoderPublishAckRequestWithConfig:(PushAccessData *)config
+-(void)encodePublishAckRequestWithConfig:(PushAccessData *)config
                                 andPushId:(NSString *)pushId
                                   handler:(PushCodecEncoderBlock)block;
 
@@ -43,7 +43,7 @@ typedef void (^PushCodecEncoderBlock)(NSData *);
  * @param config 配置数据。
  * @param block 编码处理block。
  **/
--(void)encoderSubscribeWithConfig:(PushAccessData *)config
+-(void)encodeSubscribeWithConfig:(PushAccessData *)config
                           handler:(PushCodecEncoderBlock)block;
 
 /**
@@ -51,7 +51,7 @@ typedef void (^PushCodecEncoderBlock)(NSData *);
  * @param config 配置数据。
  * @param block 编码处理block。
  **/
--(void)encoderUnsubscribeWithConfig:(PushAccessData *)config
+-(void)encodeUnsubscribeWithConfig:(PushAccessData *)config
                             handler:(PushCodecEncoderBlock)block;
 
 /**
@@ -59,7 +59,7 @@ typedef void (^PushCodecEncoderBlock)(NSData *);
  * @param config 配置数据。
  * @param block 编码处理block。
  **/
--(void)encoderPingRequestWithConfig:(PushAccessData *)config
+-(void)encodePingRequestWithConfig:(PushAccessData *)config
                             handler:(PushCodecEncoderBlock)block;
 
 /**
@@ -67,7 +67,7 @@ typedef void (^PushCodecEncoderBlock)(NSData *);
  * @param config 配置数据。
  * @param block 编码处理block。
  **/
--(void)encoderDisconnectWithConfig:(PushAccessData *)config
+-(void)encodeDisconnectWithConfig:(PushAccessData *)config
                            handler:(PushCodecEncoderBlock)block;
 
 @end

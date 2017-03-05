@@ -71,7 +71,7 @@
     }
     //发送连接请求
     __weak typeof(self) weakSelf = self;
-    [self.getEncoder encoderConnectWithConfig:_config handler:^(NSData *data) {
+    [self.getEncoder encodeConnectWithConfig:_config handler:^(NSData *data) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         NSLog(@"socket发送connectRequest请求...");
         //发送消息
@@ -181,7 +181,7 @@
     _config = conf;//替换
     //发起请求消息
     __weak typeof(self) weakSelf = self;
-    [self.getEncoder encoderSubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
+    [self.getEncoder encodeSubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf sendRequestWithData:buf];
     }];
@@ -203,7 +203,7 @@
     _config = conf;//替换
     //发起请求消息
     __weak typeof(self) weakSelf = self;
-    [self.getEncoder encoderUnsubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
+    [self.getEncoder encodeUnsubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf sendRequestWithData:buf];
     }];
@@ -218,7 +218,7 @@
     }
     //发起请求消息
     __weak typeof(self) weakSelf = self;
-    [self.getEncoder encoderDisconnectWithConfig:self.getConfig handler:^(NSData * buf){
+    [self.getEncoder encodeDisconnectWithConfig:self.getConfig handler:^(NSData * buf){
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf sendRequestWithData:buf];
     }];
