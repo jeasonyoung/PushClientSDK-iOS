@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		A10435181E4BF29B00CEC953 /* PushAccessData.m in Sources */ = {isa = PBXBuildFile; fileRef = A10435171E4BF29B00CEC953 /* PushAccessData.m */; };
 		A104351C1E4C0EAD00CEC953 /* NSString+PushExtTools.m in Sources */ = {isa = PBXBuildFile; fileRef = A104351B1E4C0EAD00CEC953 /* NSString+PushExtTools.m */; };
-		A104351F1E4C59BB00CEC953 /* PushRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = A104351E1E4C59BB00CEC953 /* PushRequestData.m */; };
+		A104351F1E4C59BB00CEC953 /* PushHttpRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = A104351E1E4C59BB00CEC953 /* PushHttpRequestData.m */; };
 		A10A0F4D1E4AC3C500F2B8C3 /* PushClientSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = A10A0F4C1E4AC3C500F2B8C3 /* PushClientSDK.m */; };
 		A10A0F4E1E4AC3C500F2B8C3 /* PushClientSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10A0F4B1E4AC3C500F2B8C3 /* PushClientSDK.h */; };
 		A10B42F91E59E3670023C160 /* PushSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A10B42F81E59E3670023C160 /* PushSocket.m */; };
@@ -53,8 +53,8 @@
 		A10435171E4BF29B00CEC953 /* PushAccessData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushAccessData.m; sourceTree = "<group>"; };
 		A104351A1E4C0EAD00CEC953 /* NSString+PushExtTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PushExtTools.h"; sourceTree = "<group>"; };
 		A104351B1E4C0EAD00CEC953 /* NSString+PushExtTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PushExtTools.m"; sourceTree = "<group>"; };
-		A104351D1E4C59BB00CEC953 /* PushRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushRequestData.h; sourceTree = "<group>"; };
-		A104351E1E4C59BB00CEC953 /* PushRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushRequestData.m; sourceTree = "<group>"; };
+		A104351D1E4C59BB00CEC953 /* PushHttpRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushHttpRequestData.h; sourceTree = "<group>"; };
+		A104351E1E4C59BB00CEC953 /* PushHttpRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushHttpRequestData.m; sourceTree = "<group>"; };
 		A10A0F481E4AC3C500F2B8C3 /* libPushClientSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPushClientSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10A0F4B1E4AC3C500F2B8C3 /* PushClientSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PushClientSDK.h; sourceTree = "<group>"; };
 		A10A0F4C1E4AC3C500F2B8C3 /* PushClientSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PushClientSDK.m; sourceTree = "<group>"; };
@@ -125,8 +125,8 @@
 				A10435171E4BF29B00CEC953 /* PushAccessData.m */,
 				A1A56B631E56A7D500C2A2D5 /* PushSocketConfigData.h */,
 				A1A56B641E56A7D500C2A2D5 /* PushSocketConfigData.m */,
-				A104351D1E4C59BB00CEC953 /* PushRequestData.h */,
-				A104351E1E4C59BB00CEC953 /* PushRequestData.m */,
+				A104351D1E4C59BB00CEC953 /* PushHttpRequestData.h */,
+				A104351E1E4C59BB00CEC953 /* PushHttpRequestData.m */,
 				A1E2B1001E5B1B620084FD87 /* PushSocketMessageType.h */,
 			);
 			name = data;
@@ -343,7 +343,7 @@
 				A1B2B8451E5FD06A00D944FE /* PushCodecDecoder.m in Sources */,
 				A1E66C2F1E5C93400015FA25 /* PushPubAckRequestModel.m in Sources */,
 				A10435181E4BF29B00CEC953 /* PushAccessData.m in Sources */,
-				A104351F1E4C59BB00CEC953 /* PushRequestData.m in Sources */,
+				A104351F1E4C59BB00CEC953 /* PushHttpRequestData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

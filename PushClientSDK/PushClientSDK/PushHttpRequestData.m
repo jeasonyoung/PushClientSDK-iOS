@@ -6,10 +6,10 @@
 //  Copyright © 2017年 Murphy. All rights reserved.
 //
 
-#import "PushRequestData.h"
+#import "PushHttpRequestData.h"
 
 //实现
-@implementation PushRequestData
+@implementation PushHttpRequestData
 
 #pragma mark -- 构造函数
 -(instancetype)initWithAccess:(const PushAccessData *)access{

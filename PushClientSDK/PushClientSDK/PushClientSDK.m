@@ -12,7 +12,7 @@
 
 
 #import "PushAccessData.h"
-#import "PushRequestData.h"
+#import "PushHttpRequestData.h"
 #import "PushSocket.h"
 
 static NSString * const PUSH_SRV_URL_PREFIX = @"http";
@@ -128,7 +128,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 访问HTTP服务器获取配置
 -(void)accessHttpServer{
     //构建参数集合
-    NSDictionary *params = [[[PushRequestData alloc] initWithAccess:_accessData] toSignParameters];
+    NSDictionary *params = [[[PushHttpRequestData alloc] initWithAccess:_accessData] toSignParameters];
     //网络请求处理
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];

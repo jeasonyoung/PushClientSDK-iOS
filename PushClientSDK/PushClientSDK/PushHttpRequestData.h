@@ -12,9 +12,9 @@
 #import "PushAccessData.h"
 
 /**
- * @brief 请求数据基础类。
+ * @brief HTTP请求数据类。
  **/
-@interface PushRequestData : PushBaseModel
+@interface PushHttpRequestData : PushBaseModel
 
 /**
  * @brief 初始化。
