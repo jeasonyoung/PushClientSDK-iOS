@@ -19,7 +19,7 @@
  * @param type 消息类型。
  * @param model 解码后的消息模型数据对象。
  **/
--(void)decoderWithType:(PushSocketMessageType)type andAckModel:(id)model;
+-(void)decodeWithType:(PushSocketMessageType)type andAckModel:(id)model;
 
 @end
 

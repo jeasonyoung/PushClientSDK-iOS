@@ -141,8 +141,8 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
 #pragma mark -- 发送接收到的消息到委托
 -(void)sendReviceMessageWithType:(PushSocketMessageType)type andReviceMessageModel:(id)model{
     if(!model || !self.delegate)return;
-    if([self.delegate respondsToSelector:@selector(decoderWithType:andAckModel:)]){
-        [self.delegate decoderWithType:type andAckModel:model];
+    if([self.delegate respondsToSelector:@selector(decodeWithType:andAckModel:)]){
+        [self.delegate decodeWithType:type andAckModel:model];
     }
 }
 

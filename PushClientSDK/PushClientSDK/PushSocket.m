@@ -106,7 +106,7 @@
 }
 
 #pragma mark -- CodecDecoderDelegate
--(void)decoderWithType:(PushSocketMessageType)type andAckModel:(id)model{
+-(void)decodeWithType:(PushSocketMessageType)type andAckModel:(id)model{
     NSLog(@"decoderWithType(%zd)andAckModel=>%@",type,model);
     switch (type) {
         case PushSocketMessageTypePingresp:{//心跳请求应答:
