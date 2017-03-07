@@ -9,42 +9,42 @@
 #import "PushPublishModel.h"
 
 #pragma mark -- 推送弹出消息数据
-static NSString * const PUSH_PUBLISH_ALERT_BODY = @"body";
-static NSString * const PUSH_PUBLISH_ALERT_ACTION_LOC_KEY = @"action-loc-key";
-static NSString * const PUSH_PUBLISH_ALERT_LOC_KEY = @"loc-key";
-static NSString * const PUSH_PUBLISH_ALERT_LAUNCH_IMAGE = @"launch-image";
-static NSString * const PUSH_PUBLISH_ALERT_LOC_ARGS = @"loc-args";
+static NSString * const PUSH_PUBLISH_APS_ALERT_BODY = @"body";
+static NSString * const PUSH_PUBLISH_APS_ALERT_ACTION_LOC_KEY = @"action-loc-key";
+static NSString * const PUSH_PUBLISH_APS_ALERT_LOC_KEY = @"loc-key";
+static NSString * const PUSH_PUBLISH_APS_ALERT_LAUNCH_IMAGE = @"launch-image";
+static NSString * const PUSH_PUBLISH_APS_ALERT_LOC_ARGS = @"loc-args";
 
-@implementation PushPublishAlertModel
+@implementation PushPublishApsAlertModel
 //初始化
--(instancetype)initWithAlertData:(NSDictionary *)alert{
+-(instancetype)initWithApsAlertData:(NSDictionary *)alert{
     if((self = [super init]) && alert && alert.count){
-        _body = alert[PUSH_PUBLISH_ALERT_BODY];//1
-        _actionLocKey = alert[PUSH_PUBLISH_ALERT_ACTION_LOC_KEY];//2
-        _locKey = alert[PUSH_PUBLISH_ALERT_LOC_KEY];//3
-        _launchImage = alert[PUSH_PUBLISH_ALERT_LAUNCH_IMAGE];//4
-        _locArgs = alert[PUSH_PUBLISH_ALERT_LOC_ARGS];
+        _body = alert[PUSH_PUBLISH_APS_ALERT_BODY];//1
+        _actionLocKey = alert[PUSH_PUBLISH_APS_ALERT_ACTION_LOC_KEY];//2
+        _locKey = alert[PUSH_PUBLISH_APS_ALERT_LOC_KEY];//3
+        _launchImage = alert[PUSH_PUBLISH_APS_ALERT_LAUNCH_IMAGE];//4
+        _locArgs = alert[PUSH_PUBLISH_APS_ALERT_LOC_ARGS];
     }
     return self;
 }
 @end
 
 #pragma mark -- Apns消息格式
-static NSString * const PUSH_PUBLISH_APNS_BADGE = @"badge";
-static NSString * const PUSH_PUBLISH_APNS_SOUND = @"sound";
-static NSString * const PUSH_PUBLISH_APNS_CONTENTAVAILABLE = @"content-available";
-static NSString * const PUSH_PUBLISH_APNS_ALERT = @"alert";
+static NSString * const PUSH_PUBLISH_APS_BADGE = @"badge";
+static NSString * const PUSH_PUBLISH_APS_SOUND = @"sound";
+static NSString * const PUSH_PUBLISH_APS_CONTENTAVAILABLE = @"content-available";
+static NSString * const PUSH_PUBLISH_APS_ALERT = @"alert";
 //
-@implementation PushPublishApnsModel
+@implementation PushPublishApsModel
 //初始化
--(instancetype)initWithApnsData:(NSDictionary *)apns{
-    if((self = [super init]) && apns && apns.count){
-        _badge = [apns[PUSH_PUBLISH_APNS_BADGE] integerValue];//1
-        _sound = apns[PUSH_PUBLISH_APNS_SOUND];//2
-        _contentAvailable = [apns[PUSH_PUBLISH_APNS_CONTENTAVAILABLE] integerValue];//3
-        id alert = apns[PUSH_PUBLISH_APNS_ALERT];
+-(instancetype)initWithApsData:(NSDictionary *)aps{
+    if((self = [super init]) && aps && aps.count){
+        _badge = [aps[PUSH_PUBLISH_APS_BADGE] integerValue];//1
+        _sound = aps[PUSH_PUBLISH_APS_SOUND];//2
+        _contentAvailable = [aps[PUSH_PUBLISH_APS_CONTENTAVAILABLE] integerValue];//3
+        id alert = aps[PUSH_PUBLISH_APS_ALERT];
         if([alert isKindOfClass:[NSDictionary class]]){
-            _alert = [[PushPublishAlertModel alloc] initWithAlertData:alert];//4
+            _alert = [[PushPublishApsAlertModel alloc] initWithApsAlertData:alert];//4
         }else if([alert isKindOfClass:[NSString class]]){
             _alert = (NSString *)alert;
         }else{
@@ -78,7 +78,7 @@ static NSString * const PUSH_PUBLISH_APS = @"aps";
             }
         }
         //4
-        _apns = [[PushPublishApnsModel alloc] initWithApnsData:data[PUSH_PUBLISH_APS]];
+        _aps = [[PushPublishApsModel alloc] initWithApsData:data[PUSH_PUBLISH_APS]];
     }
     return self;
 }

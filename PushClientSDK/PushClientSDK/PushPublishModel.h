@@ -11,7 +11,7 @@
 /**
  * 推送弹出消息数据。
  **/
-@interface PushPublishAlertModel : NSObject
+@interface PushPublishApsAlertModel : NSObject
 
 /**
  * @brief 弹出消息内容。
@@ -36,14 +36,14 @@
  * @param alert 字典数据。
  * @return 对象实例。
  **/
--(instancetype)initWithAlertData:(NSDictionary *)alert;
+-(instancetype)initWithApsAlertData:(NSDictionary *)alert;
 
 @end
 
 /**
  * @brief Apns消息格式
  **/
-@interface PushPublishApnsModel : NSObject
+@interface PushPublishApsModel : NSObject
 
 /**
  * @brief 弹出数据格式。
@@ -62,10 +62,10 @@
 
 /**
  * @brief 初始化对象。
- * @param apns 数据字典。
+ * @param aps 数据字典。
  * @return 返回对象。
  **/
--(instancetype)initWithApnsData:(NSDictionary *)apns;
+-(instancetype)initWithApsData:(NSDictionary *)aps;
 
 @end
 
@@ -75,9 +75,9 @@
 @interface PushPublishModel : NSObject
 
 /**
- * @brief apns消息格式。
+ * @brief aps消息格式。
  **/
-@property(retain,nonatomic,readonly)PushPublishApnsModel *apns;
+@property(retain,nonatomic,readonly)PushPublishApsModel *aps;
 /**
  * @brief 推送消息ID。
  **/

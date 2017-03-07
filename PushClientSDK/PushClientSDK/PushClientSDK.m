@@ -179,11 +179,11 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     if(!publish)return;
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withIsApns:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
         NSString *title = nil;
-        id alert = publish.apns ? publish.apns.alert : nil;
+        id alert = publish.aps ? publish.aps.alert : nil;
         if(alert && [alert isKindOfClass:[NSString class]]){
             title = (NSString *)alert;
-        }else if(alert && [alert isKindOfClass:[PushPublishAlertModel class]]){
-            title = ((PushPublishAlertModel *)alert).body;
+        }else if(alert && [alert isKindOfClass:[PushPublishApsAlertModel class]]){
+            title = ((PushPublishApsAlertModel *)alert).body;
         }
         [self.delegate pushClientSDK:self
                           withIsApns:NO
