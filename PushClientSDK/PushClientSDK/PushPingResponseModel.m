@@ -8,8 +8,8 @@
 
 #import "PushPingResponseModel.h"
 
-static NSString * const PUSH_PARAMS_HEARTRATE = @"heartRate";
-static NSString * const PUSH_PARAMS_AFTERCONNECT = @"afterConnect";
+static NSString * const PUSH_PARAMS_HEART_RATE = @"heartRate";
+static NSString * const PUSH_PARAMS_AFTER_CONNECT = @"afterConnect";
 //实现。
 @implementation PushPingResponseModel
 
@@ -17,9 +17,9 @@ static NSString * const PUSH_PARAMS_AFTERCONNECT = @"afterConnect";
 -(instancetype)initWithData:(NSDictionary *)data{
     if((self = [super init]) && data && data.count){
         //1
-        _heartRate = [data[PUSH_PARAMS_HEARTRATE] integerValue];
+        _heartRate = [data[PUSH_PARAMS_HEART_RATE] integerValue];
         //2
-        _afterConnect = [data[PUSH_PARAMS_AFTERCONNECT] integerValue];
+        _afterConnect = [data[PUSH_PARAMS_AFTER_CONNECT] integerValue];
     }
     return self;
 }
@@ -40,7 +40,7 @@ static NSString * const PUSH_PARAMS_AFTERCONNECT = @"afterConnect";
 
 -(NSString *)description{
     return [NSString stringWithFormat:@"{\"%@\":%zd,\"%@\":%zd}",
-            PUSH_PARAMS_HEARTRATE,self.heartRate,PUSH_PARAMS_AFTERCONNECT,self.afterConnect];
+            PUSH_PARAMS_HEART_RATE,self.heartRate,PUSH_PARAMS_AFTER_CONNECT,self.afterConnect];
 }
 
 @end

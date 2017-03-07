@@ -8,7 +8,7 @@
 
 #import "PushSubscribeRequestModel.h"
 
-static NSString * const PUSH_PARAMS_DEVICEACCOUNT = @"deviceAccount";
+static NSString * const PUSH_PARAMS_DEVICE_ACCOUNT = @"deviceAccount";
 
 //实现
 @implementation PushSubscribeRequestModel
@@ -21,8 +21,8 @@ static NSString * const PUSH_PARAMS_DEVICEACCOUNT = @"deviceAccount";
 #pragma mark -- 签名。
 -(NSDictionary *)toSign{
     _params = @{ PUSH_PARAMS_ACCOUNT : (self.account ? self.account : @""),
-                 PUSH_PARAMS_DEVICEID : (self.deviceId ? self.deviceId : @""),
-                 PUSH_PARAMS_DEVICEACCOUNT : (_deviceAccount ? _deviceAccount : @"")
+                 PUSH_PARAMS_DEVICE_ID : (self.deviceId ? self.deviceId : @""),
+                 PUSH_PARAMS_DEVICE_ACCOUNT : (_deviceAccount ? _deviceAccount : @"")
                 };
     return [super toSign];
 }

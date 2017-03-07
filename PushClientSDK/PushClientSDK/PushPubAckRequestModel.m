@@ -8,7 +8,7 @@
 
 #import "PushPubAckRequestModel.h"
 
-static NSString * const PUSH_PARAMS_PUSHID = @"pushId";
+static NSString * const PUSH_PARAMS_PUSH_ID = @"pushId";
 
 //实现
 @implementation PushPubAckRequestModel
@@ -21,8 +21,8 @@ static NSString * const PUSH_PARAMS_PUSHID = @"pushId";
 #pragma mark -- 签名
 -(NSDictionary *)toSign{
     _params = @{ PUSH_PARAMS_ACCOUNT : (self.account ? self.account : @""),
-                 PUSH_PARAMS_DEVICEID : (self.deviceId ? self.deviceId : @""),
-                 PUSH_PARAMS_PUSHID : (_pushId ? _pushId : @"")};
+                 PUSH_PARAMS_DEVICE_ID : (self.deviceId ? self.deviceId : @""),
+                 PUSH_PARAMS_PUSH_ID : (_pushId ? _pushId : @"")};
     return [super toSign];
 }
 

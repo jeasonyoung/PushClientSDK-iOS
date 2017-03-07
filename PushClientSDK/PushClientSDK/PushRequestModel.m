@@ -8,7 +8,7 @@
 
 #import "PushRequestModel.h"
 
-NSString * const PUSH_PARAMS_DEVICEID = @"deviceId";
+NSString * const PUSH_PARAMS_DEVICE_ID = @"deviceId";
 
 //实现
 @implementation PushRequestModel

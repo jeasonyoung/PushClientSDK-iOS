@@ -31,7 +31,7 @@ static NSString * const PUSH_PARAMS_DEVICE_ACCOUNT = @"deviceAccount";//4.设备
 #pragma mark -- 重载签名数据
 -(NSDictionary *)toSign{
     _params = @{ PUSH_PARAMS_ACCOUNT : (self.account ? self.account : @""),
-                 PUSH_PARAMS_DEVICEID : (self.deviceId ? self.deviceId : @""),
+                 PUSH_PARAMS_DEVICE_ID : (self.deviceId ? self.deviceId : @""),
                  PUSH_PARAMS_DEVICE_NAME : (_deviceName ? _deviceName : @""),
                  PUSH_PARAMS_DEVICE_TYPE : [NSNumber numberWithUnsignedInteger:_deviceType],
                  PUSH_PARAMS_DEVICE_ACCOUNT : (_deviceAccount ? _deviceAccount : @"")};

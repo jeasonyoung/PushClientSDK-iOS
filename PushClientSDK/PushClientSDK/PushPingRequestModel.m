@@ -19,7 +19,7 @@
 #pragma mark -- 参数签名
 -(NSDictionary *)toSign{
     _params = @{PUSH_PARAMS_ACCOUNT : (self.account ? self.account : @""),
-                PUSH_PARAMS_DEVICEID : (self.deviceId ? self.deviceId : @"")};
+                PUSH_PARAMS_DEVICE_ID : (self.deviceId ? self.deviceId : @"")};
     
     return [super toSign];
 }

@@ -13,7 +13,7 @@
 /**
  * @brief 请求参数-设备ID字段名。
  **/
-FOUNDATION_EXPORT NSString * const PUSH_PARAMS_DEVICEID;
+FOUNDATION_EXPORT NSString * const PUSH_PARAMS_DEVICE_ID;
 
 /**
  * @brief 请求模型。
