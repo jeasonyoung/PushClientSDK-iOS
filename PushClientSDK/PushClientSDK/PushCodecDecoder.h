@@ -36,6 +36,6 @@
  * @brief 添加需解码的数据。
  * @param source 需解码的源数据。
  **/
--(void)decoderWithAppendData:(NSData *)source;
+-(void)decodeWithAppendData:(NSData *)source;
 
 @end

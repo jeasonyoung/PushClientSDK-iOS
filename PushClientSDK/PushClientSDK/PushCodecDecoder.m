@@ -36,7 +36,7 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
 }
 
 #pragma mark -- 添加解码源数据。
--(void)decoderWithAppendData:(NSData *)source{
+-(void)decodeWithAppendData:(NSData *)source{
     if(!source || !source.length) return;
     if(!_header){//消息头处理
         if(source.length < PUSH_HEAD_DATA_MIN_LEN){
@@ -54,18 +54,18 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
         if(available > 0){
             NSData *data = [source subdataWithRange:NSMakeRange(index + 1, available)];
             if(_header.remainingLength > 0){//有消息体，递归处理
-                [self decoderWithAppendData:data];
+                [self decodeWithAppendData:data];
                 return;
             }
             //无消息体
-            [self decoderMessageWithHeader:_header andPayload:nil];
+            [self decodeMessageWithHeader:_header andPayload:nil];
             _header = nil;
-            [self decoderWithAppendData:data];
+            [self decodeWithAppendData:data];
             return;
         }
         //无剩余长度,无消息体
         if(_header.remainingLength == 0){
-            [self decoderMessageWithHeader:_header andPayload:nil];
+            [self decodeMessageWithHeader:_header andPayload:nil];
             _header = nil;
         }
     }else{//消息体处理
@@ -79,7 +79,7 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
             //截取消息体长度数据
             NSData *payload = [_buffer subdataWithRange:NSMakeRange(0, payloadLength)];
             //解析消息体
-            [self decoderMessageWithHeader:_header andPayload:payload];
+            [self decodeMessageWithHeader:_header andPayload:payload];
             _header = nil;
             //剩余数据
             NSInteger len = 0;
@@ -87,7 +87,7 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
                 //截取剩余长度
                 NSData *buf = [_buffer subdataWithRange:NSMakeRange(payloadLength, len)];
                 _buffer = nil;//清空缓存
-                [self decoderWithAppendData:buf];
+                [self decodeWithAppendData:buf];
             }else{//清空缓存
                 _buffer = nil;
             }
@@ -96,7 +96,7 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
 }
 
 #pragma mark -- 解析消息体
--(void)decoderMessageWithHeader:(PushFixedHeader *)header andPayload:(NSData *)payload{
+-(void)decodeMessageWithHeader:(PushFixedHeader *)header andPayload:(NSData *)payload{
     if(!header){
         NSLog(@"消息头为空，无法解析消息体!");
         return;

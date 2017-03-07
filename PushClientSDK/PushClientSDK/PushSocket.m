@@ -94,7 +94,7 @@
     //设置时间戳
     _lastIdleTime = [NSDate date].timeIntervalSince1970;
     //解码处理
-    [_decoder decoderWithAppendData:data];
+    [_decoder decodeWithAppendData:data];
     //启动循环读取数据
     [sock readDataWithTimeout:-1 tag:0];
 }
