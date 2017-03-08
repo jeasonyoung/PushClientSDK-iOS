@@ -120,7 +120,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 -(void)receiveRemoteNotification:(NSDictionary *)userInfo{
     if(!userInfo || !userInfo.count) return;
     PushPublishModel *model = [[PushPublishModel alloc] initWithData:userInfo];
-    [self pushwithPublish:model];
+    [self pushwithPublish:model withIsApns:YES];
 }
 
 #pragma mark -- 内部方法。
@@ -175,7 +175,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 }
 
 #pragma mark -- 抛出推送消息
--(void)pushwithPublish:(PushPublishModel *)publish{
+-(void)pushwithPublish:(PushPublishModel *)publish withIsApns:(BOOL)isApns{
     if(!publish)return;
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withIsApns:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
         NSString *title = nil;
@@ -186,7 +186,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
             title = ((PushPublishApsAlertModel *)alert).body;
         }
         [self.delegate pushClientSDK:self
-                          withIsApns:NO
+                          withIsApns:isApns
              receivePushMessageTitle:title
                    andMessageContent:publish.content
                      withFullPublish:publish];
@@ -211,7 +211,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 推送消息处理
 -(void)pushSocket:(PushSocket *)socket withPublish:(PushPublishModel *)publish{
-    [self pushwithPublish:publish];
+    [self pushwithPublish:publish withIsApns:NO];
 }
 
 #pragma mark -- 重新连接处理
