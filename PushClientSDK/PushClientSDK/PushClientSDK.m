@@ -198,8 +198,11 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 获取socket配置数据
 -(void)pushSocket:(PushSocket *)socket withAccessConfig:(PushAccessData *__autoreleasing *)config{
     NSLog(@"pushSocket:%@,withSocketConfig:%@", socket, *config);
-    if(_accessData && _accessData.socket){
+    if(_accessData){
         *config = _accessData;
+    }else{
+        NSLog(@"pushSocket:withAccessConfig-未设置配置数据!");
+        [self sendErrorWithType:PushClientSDKErrorTypeSrvConf message:@"pushSocket:withAccessConfig-未设置配置数据!"];
     }
 }
 

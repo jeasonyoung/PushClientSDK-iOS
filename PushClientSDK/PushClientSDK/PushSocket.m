@@ -191,18 +191,7 @@
 #pragma mark -- 清除用户标签处理
 -(void)clearTagHandler{
     NSLog(@"PushSocket-clearTagHandler...");
-    //获取配置
-    PushAccessData *conf = nil;
-    if(![self loadWithConfig:&conf]){
-        [self throwsErrorWithMessageType:PushSocketMessageTypeSubscribe andMessage:@"获取配置失败!"];
-        return;
-    }
-    //验证配置
-    if(!conf || !conf.tag){
-        [self throwsErrorWithMessageType:PushSocketMessageTypeSubscribe andMessage:@"获取用户tag数据失败!"];
-        return;
-    }
-    _config = conf;//替换
+    if(!self.getConfig) return;
     //发起请求消息
     __weak typeof(self) weakSelf = self;
     [self.getEncoder encodeUnsubscribeWithConfig:self.getConfig handler:^(NSData *buf) {
