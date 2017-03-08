@@ -124,11 +124,12 @@
 
 #pragma mark -- 解码消息头
 -(PushFixedHeader *)decodeHeaderWithData:(NSData *)data withOutIndex:(NSUInteger *)index{
+    NSUInteger current =  *index;
     //读取第一字节。
     unsigned char b1 = 0;
-    [data getBytes:&b1 range:NSMakeRange(*index, 1)];
+    [data getBytes:&b1 range:NSMakeRange(current, 1)];
     if(b1 == 0){
-        NSLog(@"读取消息头数据不符合通讯协议!");
+        NSLog(@"decodeHeaderWithData-读取消息头数据不符合通讯协议!");
         return nil;
     }
     //消息类型
@@ -136,17 +137,22 @@
     //qos
     PushSocketMessageQos qos = (b1 & 0x06) >> 1;
     if(qos < PushSocketMessageQosNone || qos > PushSocketMessageQosAck){
-        NSLog(@"读取的头数据不符合通讯协议的定义!");
+        NSLog(@"decodeHeaderWithData-读取的头数据不符合通讯协议的定义!");
         return nil;
     }
     //读取消息体长度
     NSUInteger remainingLength = 0,multiplier = 1,loops = 0;
-    short digit;
+    short digit = 0;
     do{
+        current += 1;
+        if(current >= data.length){
+            NSLog(@"decodeHeaderWithData-索引越界(index=%zd,lenght=%zd)", current, data.length);
+            return nil;
+        }
         //读取后续字节
-        [data getBytes:&digit range:NSMakeRange((++(*index)), 1)];
+        [data getBytes:&digit range:NSMakeRange(current, 1)];
         if(digit <= -1){
-            NSLog(@"读取到无意义的长度字节数据(%d)!", digit);
+            NSLog(@"decodeHeaderWithData-读取到无意义的长度字节数据(%d)!", digit);
             return nil;
         }
         //转换为十进制
@@ -156,9 +162,10 @@
         loops++;
     }while(((digit & 0x80) != 0) && loops < 4);
     if(loops >= 4 && (digit & 0x80) != 0){
-        NSLog(@"消息长度大于4个字节，不符合通讯协议!");
+        NSLog(@"decodeHeaderWithData-消息长度大于4个字节，不符合通讯协议!");
         return nil;
     }
+    *index = current;
     //生成消息头
     return [[PushFixedHeader alloc] initWithType:type
                                        withIsAck:(qos == PushSocketMessageQosAck)

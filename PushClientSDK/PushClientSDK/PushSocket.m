@@ -96,7 +96,9 @@
     //解码处理
     [_decoder decodeWithAppendData:data];
     //启动循环读取数据
-    [sock readDataWithTimeout:-1 tag:0];
+    if(self.isRun){
+        [sock readDataWithTimeout:-1 tag:0];
+    }
 }
 #pragma mark -- 写入数据
 -(void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
@@ -228,8 +230,13 @@
 -(void)sendRequestWithData:(NSData *)data{
     if(!data || !data.length || !_socket)return;
     NSLog(@"socket开始发送请求数据(%zd)....", data.length);
+    if(!self.isRun){
+        NSLog(@"socket[已断开]发送消息失败!");
+    }
+    //发送数据
     [_socket writeData:data withTimeout:-1 tag:0];
     if(self.isStart){
+        //读取应答
         [_socket readDataWithTimeout:-1 tag:0];
     }
 }

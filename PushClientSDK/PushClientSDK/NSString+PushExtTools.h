@@ -22,4 +22,9 @@
  **/
 -(NSString *)md5;
 
+/**
+ * @brief 将NSData转换为Hex格式
+ **/
++(NSString *)dataToHex:(NSData *)data;
+
 @end

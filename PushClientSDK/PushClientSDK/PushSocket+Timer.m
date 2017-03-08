@@ -109,6 +109,8 @@
             if(current - strongSelf.lastIdleTime < rate){
                 return;
             }
+            //线程等候2秒
+            sleep(2);
             //执行心跳处理
             dispatch_async(dispatch_get_main_queue(), ^{
                 __strong typeof(weakSelf) strongSelfMain = weakSelf;

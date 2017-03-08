@@ -44,7 +44,7 @@
     _password = pwd ? [pwd trim] : @"";
     //4.设备令牌
     if(token && token.length){
-        _deviceToken = [[NSString alloc] initWithData:token encoding:NSUTF8StringEncoding];
+        _deviceToken = [NSString dataToHex:token];
     }else{
         _deviceToken = nil;
     }

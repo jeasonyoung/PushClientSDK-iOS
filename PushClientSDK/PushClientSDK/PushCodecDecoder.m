@@ -11,10 +11,13 @@
 #import "PushPublishModel.h"
 #import "PushPingResponseModel.h"
 
+#define PUSH_CODEC_DECODER_DQ_NAME "push_codec_decodec_queue"
+
 //成员变量。
 @interface PushCodecDecoder (){
     PushFixedHeader *_header;
     NSMutableData *_buffer;
+    dispatch_queue_t _queue;
 }
 @end
 
@@ -30,6 +33,7 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
 -(instancetype)init{
     if(self = [super init]){
         _header = nil;
+        _queue = dispatch_queue_create(PUSH_CODEC_DECODER_DQ_NAME, DISPATCH_QUEUE_SERIAL);
         _buffer = [NSMutableData data];
     }
     return self;
@@ -70,7 +74,9 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
         }
     }else{//消息体处理
         //缓存如果不存在,则初始化
-        if(!_buffer) _buffer = [NSMutableData data];
+        if(!_buffer){
+            _buffer = [NSMutableData dataWithCapacity:source.length];
+        }
         [_buffer appendData:source];
         //检查缓存数据是否满足消息体长度
         if(_buffer.length >= _header.remainingLength){
@@ -97,45 +103,47 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
 
 #pragma mark -- 解析消息体
 -(void)decodeMessageWithHeader:(PushFixedHeader *)header andPayload:(NSData *)payload{
-    if(!header){
-        NSLog(@"消息头为空，无法解析消息体!");
-        return;
-    }
-    NSString *json = nil;
-    if(payload && payload.length){
-        //转换为JSON字符串。
-        json = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
-        NSLog(@"decoder[%zd]=>\n%@", header.type, json);
-    }
-    //解析消息体
-    switch (header.type) {
-        case PushSocketMessageTypeNone://未知消息
-            NSLog(@"decoderMessageWithHeader:andPayload-未知消息类型=>%zd", header.type);
-            break;
-        case PushSocketMessageTypeConnack://连接请求应答
-        case PushSocketMessageTypePubrel://推送消息达到请求应答
-        case PushSocketMessageTypeSuback://用户登录请求应答
-        case PushSocketMessageTypeUnsuback://用户注销请求应答
-        {
-            PushAckModel *model = [PushAckModel ackWithType:header.type andAckJson:json];
-            [self sendReviceMessageWithType:model.type andReviceMessageModel:model];
-            break;
+    dispatch_async(_queue, ^{//异步线程解析
+        if(!header){
+            NSLog(@"decodeMessageWithHeader:andPayload-消息头为空，无法解析消息体!");
+            return;
         }
-        case PushSocketMessageTypePublish:{//推送消息下行
-            PushPublishModel *model = [PushPublishModel publishWithJSON:json];
-            [self sendReviceMessageWithType:PushSocketMessageTypePublish andReviceMessageModel:model];
-            break;
+        NSString *json = nil;
+        if(payload && payload.length){
+            //转换为JSON字符串。
+            json = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
+            NSLog(@"decodeMessageWithHeader:andPayload-[%zd]=>\n%@", header.type, json);
         }
-        case PushSocketMessageTypePingresp:{//心跳请求应答
-            PushPingResponseModel *model = [PushPingResponseModel pingResponseWithJSON:json];
-            [self sendReviceMessageWithType:PushSocketMessageTypePingresp andReviceMessageModel:model];
-            break;
+        //解析消息体
+        switch (header.type) {
+            case PushSocketMessageTypeNone://未知消息
+                NSLog(@"decoderMessageWithHeader:andPayload-未知消息类型=>%zd", header.type);
+                break;
+            case PushSocketMessageTypeConnack://连接请求应答
+            case PushSocketMessageTypePubrel://推送消息达到请求应答
+            case PushSocketMessageTypeSuback://用户登录请求应答
+            case PushSocketMessageTypeUnsuback://用户注销请求应答
+            {
+                PushAckModel *model = [PushAckModel ackWithType:header.type andAckJson:json];
+                [self sendReviceMessageWithType:model.type andReviceMessageModel:model];
+                break;
+            }
+            case PushSocketMessageTypePublish:{//推送消息下行
+                PushPublishModel *model = [PushPublishModel publishWithJSON:json];
+                [self sendReviceMessageWithType:PushSocketMessageTypePublish andReviceMessageModel:model];
+                break;
+            }
+            case PushSocketMessageTypePingresp:{//心跳请求应答
+                PushPingResponseModel *model = [PushPingResponseModel pingResponseWithJSON:json];
+                [self sendReviceMessageWithType:PushSocketMessageTypePingresp andReviceMessageModel:model];
+                break;
+            }
+            default:{
+                NSLog(@"decoderMessageWithHeader:andPayload-消息类型不在处理范围内(%zd)!", header.type);
+                break;
+            }
         }
-        default:{
-            NSLog(@"decoderMessageWithHeader:andPayload-消息类型不在处理范围内(%zd)!", header.type);
-            break;
-        }
-    }
+    });
 }
 
 #pragma mark -- 发送接收到的消息到委托

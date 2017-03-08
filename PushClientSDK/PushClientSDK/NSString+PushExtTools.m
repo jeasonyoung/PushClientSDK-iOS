@@ -34,4 +34,16 @@
     return outputStr;
 }
 
+#pragma mark -- 将NSData转换为Hex格式
++(NSString *)dataToHex:(NSData *)data{
+    if(!data || data.length == 0) return nil;
+    //
+    NSMutableString *hexStr = [[NSMutableString alloc]  initWithCapacity:(data.length * 2)];
+    const unsigned char *buf = data.bytes;
+    for(NSInteger i = 0; i < data.length; i++){
+        [hexStr appendFormat:@"%02x", buf[i]];
+    }
+    return hexStr;
+}
+
 @end
