@@ -151,10 +151,6 @@
         }
         //读取后续字节
         [data getBytes:&digit range:NSMakeRange(current, 1)];
-        if(digit <= -1){
-            NSLog(@"decodeHeaderWithData-读取到无意义的长度字节数据(%d)!", digit);
-            return nil;
-        }
         //转换为十进制
         remainingLength += (digit & 0x7f) * multiplier;
         multiplier *= 128;
