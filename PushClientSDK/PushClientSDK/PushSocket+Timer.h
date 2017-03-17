@@ -14,14 +14,18 @@
 @interface PushSocket (Timer)
 
 /**
- * @brief 重启连接处理。
+ * @brief 自动重连处理。
  **/
--(void)restartConnectHandler;
+-(void)reconnectHandler;
+
+/**
+ * @brief 重启连接处理(按协议延时重连)。
+ **/
+-(void)restartHandler;
 
 /**
  * @brief 开启心跳处理。
  **/
 -(void)startPingHandler;
-
 
 @end

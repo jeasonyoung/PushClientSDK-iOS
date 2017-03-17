@@ -17,13 +17,7 @@
 
 //成员变量
 @interface PushSocket ()<GCDAsyncSocketDelegate,PushCodecDecoderDelegate>{
-    /**
-     * @brief socket通讯对象。
-     **/
     GCDAsyncSocket *_socket;
-    /**
-     * @brief 消息解码器。
-     **/
     PushCodecDecoder *_decoder;
 }
 
@@ -54,11 +48,14 @@
         _encoder = [[PushCodecEncoder alloc] init];
         //4.消息解码
         _decoder = [[PushCodecDecoder alloc] init];
-        //设置解码器委托
+        //4.1设置解码器委托
         _decoder.delegate = self;
+        //5.推送消息ID缓存
+        _pushIdCache = [NSMutableArray arrayWithCapacity:20];
     }
     return self;
 }
+
 
 #pragma mark -- GCD Async Socket Delegate
 #pragma mark -- 连接成功调用
@@ -84,7 +81,7 @@
     //是否已关闭服务
     if(self.isStart){
         //准备启动重新连接定时器。
-        [self restartConnectHandler];
+        [self reconnectHandler];
     }
 }
 #pragma mark -- 读取数据
@@ -213,6 +210,10 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf sendRequestWithData:buf];
     }];
+    //清空推送ID缓存
+    if(self.getPushIdCache.count > 0){
+        [self.getPushIdCache removeAllObjects];
+    }
 }
 
 #pragma mark -- 发送请求数据。

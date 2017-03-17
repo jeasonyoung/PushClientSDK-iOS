@@ -109,6 +109,12 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     }
 }
 
+#pragma mark -- 重启客户端
+-(void)restart{
+    NSLog(@"restart...");
+    [self startSocketClient];
+}
+
 #pragma mark -- 关闭推送客户端
 -(void)close{
     NSLog(@"close...");

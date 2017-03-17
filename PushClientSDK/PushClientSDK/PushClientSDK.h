@@ -99,6 +99,11 @@ receivePushMessageTitle:(NSString *)title
 -(void)clearTag;
 
 /**
+ * @brief 重启推送客户端。
+ **/
+-(void)restart;
+
+/**
  * @brief 关闭推送客户端。
  **/
 -(void)close;

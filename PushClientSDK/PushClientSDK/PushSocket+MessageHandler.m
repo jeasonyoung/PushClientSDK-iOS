@@ -36,6 +36,10 @@
     }
     if(pingAck.afterConnect > 0 && self.getConfig && self.getConfig.socket){
         self.getConfig.socket.reconnect = pingAck.afterConnect;
+        //断开连接
+        [self stop];
+        //启动重启定时器
+        [self restartHandler];
     }
 }
 
@@ -55,6 +59,14 @@
         __strong typeof(weakSelf)strongSelf = weakSelf;
         [strongSelf sendRequestWithData:buf];
     }];
+    //判断消息是否已接收过
+    if(self.getPushIdCache.count > 0 && [self.getPushIdCache containsObject:data.pushId]){
+        NSLog(@"消息[%@]已推送过，将忽略不向App展示!", data.pushId);
+        return;
+    }
+    //将数据保存到缓存中
+    [self.getPushIdCache addObject:data.pushId];
+    
     //推送消息抛出到主线程处理
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(weakSelf)strongSelf = weakSelf;

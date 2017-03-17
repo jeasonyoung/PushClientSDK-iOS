@@ -10,13 +10,57 @@
 
 //重连队列
 #define PUSH_DISPATCH_QUEUE_RECONNECT_NAME "com.csblank.push.reconnect"
+//重启队列
+#define PUSH_DISPATCH_QUEUE_RESTART_NAME "com.csblank.push.restart"
 //心跳队列
 #define PUSH_DISPATCH_QUEUE_PING_NAME "com.csblank.push.ping"
 
+
 @implementation PushSocket (Timer)
 
+#pragma mark -- 自动重连处理
+-(void)reconnectHandler{//单例方法
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        __weak typeof(self) weakSelf = self;
+        //重连队列
+        dispatch_queue_t queue = dispatch_queue_create(PUSH_DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_SERIAL);
+        //启动异步线程
+        dispatch_async(queue, ^{
+            @try{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                //计数器,间隔时间
+                NSUInteger totals = 0, interval = 5;
+                //检查连接状态
+                while(strongSelf && strongSelf.isStart && !strongSelf.isRun && (totals < NSIntegerMax)){
+                    totals++;//计数器递增
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        @try {
+                            __strong typeof(weakSelf) strongSelfMain = weakSelf;
+                            if(!strongSelfMain.delegate) return;
+                            if(!strongSelfMain.delegate) return;
+                            //调用重连处理
+                            if([strongSelfMain.delegate respondsToSelector:@selector(pushSocket:withStartReconnect:)]){
+                                [strongSelfMain.delegate pushSocket:self withStartReconnect:YES];
+                            }
+                        } @catch (NSException *exception) {
+                            NSLog(@"reconnectHandler-reconnect-exception:%@", exception);
+                        }
+                    });
+                    //线程等待
+                    sleep(interval * (totals + 1) * 1.5);
+                }
+            }@catch(NSException *e){
+                NSLog(@"reconnectHandler-发送异常:%@", e);
+            }@finally{//退出处理
+                onceToken = 0;//释放单例
+            }
+        });
+    });
+}
+
 #pragma mark -- 重启连接处理
--(void)restartConnectHandler{
+-(void)restartHandler{
     //单例方法
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -35,14 +79,14 @@
             return;
         }
         __weak typeof(self) weakSelf = self;
-        //重连队列
-        dispatch_queue_t queue = dispatch_queue_create(PUSH_DISPATCH_QUEUE_RECONNECT_NAME, DISPATCH_QUEUE_CONCURRENT);
+        //重启队列
+        dispatch_queue_t queue = dispatch_queue_create(PUSH_DISPATCH_QUEUE_RESTART_NAME, DISPATCH_QUEUE_CONCURRENT);
         //启动异步线程
         dispatch_async(queue, ^{
             //启动执行次数
             dispatch_apply(reconnectMaxTotals, queue, ^(size_t index) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
-                if(!strongSelf.isStart || strongSelf.isRun){
+                if(strongSelf.isRun){
                     NSLog(@"restartConnectHandler-(start:%zd,run:%zd)!", strongSelf.isStart, strongSelf.isRun);
                     onceToken = 0;
                     return;

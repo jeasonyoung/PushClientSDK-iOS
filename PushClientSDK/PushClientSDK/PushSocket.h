@@ -81,6 +81,11 @@
 @property(retain,atomic,readonly, getter=getEncoder)PushCodecEncoder *encoder;
 
 /**
+ * @brief 获取推送消息ID缓存。
+ **/
+@property(assign,atomic,readonly,getter=getPushIdCache)NSMutableArray *pushIdCache;
+
+/**
  * @brief 代理属性。
  **/
 @property(assign,nonatomic)id<PushSocketHandlerDelegate> delegate;
