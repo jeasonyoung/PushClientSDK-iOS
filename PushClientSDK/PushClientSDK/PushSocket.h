@@ -83,7 +83,7 @@
 /**
  * @brief 获取推送消息ID缓存。
  **/
-@property(assign,atomic,getter=getPushIdCache)NSMutableArray *pushIdCache;
+@property(retain,atomic,readonly,getter=getPushIdCache)NSMutableArray *pushIdCache;
 
 /**
  * @brief 代理属性。
