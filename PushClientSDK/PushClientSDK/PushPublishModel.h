@@ -13,6 +13,7 @@
  **/
 @interface PushPublishApsAlertModel : NSObject
 
+@property(copy,nonatomic,readonly)NSString *title;
 /**
  * @brief 弹出消息内容。
  **/

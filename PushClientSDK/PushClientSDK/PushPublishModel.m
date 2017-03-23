@@ -9,6 +9,7 @@
 #import "PushPublishModel.h"
 
 #pragma mark -- 推送弹出消息数据
+static NSString * const PUSH_PUBLISH_APS_ALERT_TITLE = @"title";
 static NSString * const PUSH_PUBLISH_APS_ALERT_BODY = @"body";
 static NSString * const PUSH_PUBLISH_APS_ALERT_ACTION_LOC_KEY = @"action-loc-key";
 static NSString * const PUSH_PUBLISH_APS_ALERT_LOC_KEY = @"loc-key";
@@ -19,11 +20,12 @@ static NSString * const PUSH_PUBLISH_APS_ALERT_LOC_ARGS = @"loc-args";
 //初始化
 -(instancetype)initWithApsAlertData:(NSDictionary *)alert{
     if((self = [super init]) && alert && alert.count){
-        _body = alert[PUSH_PUBLISH_APS_ALERT_BODY];//1
-        _actionLocKey = alert[PUSH_PUBLISH_APS_ALERT_ACTION_LOC_KEY];//2
-        _locKey = alert[PUSH_PUBLISH_APS_ALERT_LOC_KEY];//3
-        _launchImage = alert[PUSH_PUBLISH_APS_ALERT_LAUNCH_IMAGE];//4
-        _locArgs = alert[PUSH_PUBLISH_APS_ALERT_LOC_ARGS];
+        _title = alert[PUSH_PUBLISH_APS_ALERT_TITLE];//1
+        _body = alert[PUSH_PUBLISH_APS_ALERT_BODY];//2
+        _actionLocKey = alert[PUSH_PUBLISH_APS_ALERT_ACTION_LOC_KEY];//3
+        _locKey = alert[PUSH_PUBLISH_APS_ALERT_LOC_KEY];//4
+        _launchImage = alert[PUSH_PUBLISH_APS_ALERT_LAUNCH_IMAGE];//5
+        _locArgs = alert[PUSH_PUBLISH_APS_ALERT_LOC_ARGS];//6
     }
     return self;
 }

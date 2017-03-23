@@ -23,6 +23,8 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     PushAccessData *_accessData;
     PushSocket *_socket;
 }
+//重复apns消息过滤
+@property(retain,atomic,readonly,getter=getApnsCache)NSMutableArray *apnsCache;
 @end
 
 //实现
@@ -43,8 +45,11 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 -(instancetype)init{
     if(self = [super init]){
         _accessData = [PushAccessData sharedAccess];//初始化访问数据
-        _socket = [PushSocket shareSocket];//初始化socket处理
+        //初始化socket处理
+        _socket = [PushSocket shareSocket];
         _socket.delegate = self;
+        //初始化apns消息过滤器
+        _apnsCache = [NSMutableArray arrayWithCapacity:10];
     }
     return self;
 }
@@ -126,6 +131,17 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 -(void)receiveRemoteNotification:(NSDictionary *)userInfo{
     if(!userInfo || !userInfo.count) return;
     PushPublishModel *model = [[PushPublishModel alloc] initWithData:userInfo];
+    if(!model){
+        NSLog(@"receiveRemoteNotification-消息解析错误!=>%@", userInfo);
+        return;
+    }
+    if(self.getApnsCache.count > 0 && [self.getApnsCache containsObject:model.pushId]){
+        NSLog(@"receiveRemoteNotification-消息已接收过!=>%@", model);
+        return;
+    }
+    //添加到缓存
+    [self.getApnsCache addObject:model.pushId];
+    //推送到App前台
     [self pushwithPublish:model withIsApns:YES];
 }
 
@@ -183,13 +199,20 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 抛出推送消息
 -(void)pushwithPublish:(PushPublishModel *)publish withIsApns:(BOOL)isApns{
     if(!publish)return;
+    if(!isApns && self.getApnsCache.count > 0){
+        [self.getApnsCache removeAllObjects];
+    }
+    //消息推送到App
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withIsApns:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
         NSString *title = nil;
         id alert = publish.aps ? publish.aps.alert : nil;
         if(alert && [alert isKindOfClass:[NSString class]]){
             title = (NSString *)alert;
         }else if(alert && [alert isKindOfClass:[PushPublishApsAlertModel class]]){
-            title = ((PushPublishApsAlertModel *)alert).body;
+            title = ((PushPublishApsAlertModel *)alert).title;
+            if(!title || title.length == 0){
+                title = ((PushPublishApsAlertModel *)alert).body;
+            }
         }
         [self.delegate pushClientSDK:self
                           withIsApns:isApns
