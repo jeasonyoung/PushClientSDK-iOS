@@ -23,8 +23,6 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     PushAccessData *_accessData;
     PushSocket *_socket;
 }
-//重复apns消息过滤
-@property(retain,atomic,readonly,getter=getApnsCache)NSMutableArray *apnsCache;
 @end
 
 //实现
@@ -48,8 +46,6 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
         //初始化socket处理
         _socket = [PushSocket shareSocket];
         _socket.delegate = self;
-        //初始化apns消息过滤器
-        _apnsCache = [NSMutableArray arrayWithCapacity:10];
     }
     return self;
 }
@@ -135,12 +131,6 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
         NSLog(@"receiveRemoteNotification-消息解析错误!=>%@", userInfo);
         return;
     }
-    if(self.getApnsCache.count > 0 && [self.getApnsCache containsObject:model.pushId]){
-        NSLog(@"receiveRemoteNotification-消息已接收过!=>%@", model);
-        return;
-    }
-    //添加到缓存
-    [self.getApnsCache addObject:model.pushId];
     //推送到App前台
     [self pushwithPublish:model withIsApns:YES];
 }
@@ -199,9 +189,6 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 #pragma mark -- 抛出推送消息
 -(void)pushwithPublish:(PushPublishModel *)publish withIsApns:(BOOL)isApns{
     if(!publish)return;
-    if(!isApns && self.getApnsCache.count > 0){
-        [self.getApnsCache removeAllObjects];
-    }
     //消息推送到App
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withIsApns:receivePushMessageTitle:andMessageContent:withFullPublish:)]){
         NSString *title = nil;
