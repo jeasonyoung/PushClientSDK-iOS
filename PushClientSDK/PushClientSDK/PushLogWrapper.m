@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
 #define PUSH_LOG_FILE_PREFIX @"pushSDK"
 
 
-#define DLog(fmt, ...) NSLog((@"[文件名:%s]\n" "[函数名:%s]\n" "[行号:%d] \n" fmt), __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define DLog(fmt, ...) NSLog(fmt, ##__VA_ARGS__);
 
 //成员变量
 @interface PushLogWrapper (){
@@ -208,7 +208,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
         BOOL isCreateFile = [fileMgr createFileAtPath:logFilePath contents:data attributes:nil];
         DLog(@"createLogFilePathWithLevel[%zd]-创建日志文件[%zd]:%@", level, isCreateFile, logFilePath);
     }
-    DLog(@"createLogFilePathWithLevel[%zd]-日志文件:%@", level, logFilePath);
+    //DLog(@"createLogFilePathWithLevel[%zd]-日志文件:%@", level, logFilePath);
     return logFilePath;
 }
 
