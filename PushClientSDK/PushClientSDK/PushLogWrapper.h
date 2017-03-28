@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 
-#define LogD(fmt,...) [[PushLogWrapper sharedInstance] debugWithFormat:(@"\r\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
-#define LogI(fmt,...) [[PushLogWrapper sharedInstance] infoWithFormat:(@"\r\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
-#define LogW(fmt,...) [[PushLogWrapper sharedInstance] warnWithFormat:(@"\r\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
-#define LogE(fmt,...) [[PushLogWrapper sharedInstance] errorWithFormat:(@"\r\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
+#define LogD(fmt,...) [[PushLogWrapper sharedInstance] debugWithFormat:(@"\n\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
+#define LogI(fmt,...) [[PushLogWrapper sharedInstance] infoWithFormat:(@"\n\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
+#define LogW(fmt,...) [[PushLogWrapper sharedInstance] warnWithFormat:(@"\n\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
+#define LogE(fmt,...) [[PushLogWrapper sharedInstance] errorWithFormat:(@"\n\n[文件名:%s]\n[函数名:%s]\n[行号:%d]\n" fmt),__FILE__,__FUNCTION__,__LINE__,##__VA_ARGS__]
 
 
 /**
