@@ -34,6 +34,9 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
 #define PUSH_LOG_DIR @"PushClientSDKLogs"
 #define PUSH_LOG_FILE_PREFIX @"pushSDK"
 
+
+#define DLog(fmt, ...) NSLog((@"[文件名:%s]\n" "[函数名:%s]\n" "[行号:%d] \n" fmt), __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__);
+
 //成员变量
 @interface PushLogWrapper (){
     //日志写队列
@@ -86,9 +89,9 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
                               withIntermediateDirectories:YES
                                                attributes:@{NSFileProtectionKey : NSFileProtectionNone}
                                                     error:nil];
-        NSLog(@"createLogSaveRoot-创建日志保存目录[%zd]:\n%@", isCreateDir,logDir);
+        DLog(@"createLogSaveRoot-创建日志保存目录[%zd]:\n%@", isCreateDir,logDir);
     }
-    NSLog(@"createLogSaveRoot-日志保存目录:\n%@", logDir);
+    DLog(@"createLogSaveRoot-日志保存目录:\n%@", logDir);
     return logDir;
 }
 
@@ -157,7 +160,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     }
 
 //#ifdef DEBUG
-    NSLog(@"[%@]%@", strLevel, log);
+    DLog(@"[%@]%@", strLevel, log);
 //#endif
     
     //日志写入文件处理
@@ -181,7 +184,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
             //追加写入文件
             [fileHandle writeData:data];
         } @catch (NSException *exception) {
-            NSLog(@"写入日志文件异常:%@", exception);
+            DLog(@"写入日志文件异常:%@", exception);
         }
     });
 }
@@ -203,9 +206,9 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
         NSData *data = [initContent dataUsingEncoding:NSUTF8StringEncoding];
         //创建日志文件
         BOOL isCreateFile = [fileMgr createFileAtPath:logFilePath contents:data attributes:nil];
-        NSLog(@"createLogFilePathWithLevel[%zd]-创建日志文件[%zd]:%@", level, isCreateFile, logFilePath);
+        DLog(@"createLogFilePathWithLevel[%zd]-创建日志文件[%zd]:%@", level, isCreateFile, logFilePath);
     }
-    NSLog(@"createLogFilePathWithLevel[%zd]-日志文件:%@", level, logFilePath);
+    DLog(@"createLogFilePathWithLevel[%zd]-日志文件:%@", level, logFilePath);
     return logFilePath;
 }
 

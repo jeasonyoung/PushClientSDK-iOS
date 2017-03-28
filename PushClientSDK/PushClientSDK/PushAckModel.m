@@ -7,6 +7,7 @@
 //
 
 #import "PushAckModel.h"
+#import "PushLogWrapper.h"
 
 static NSString * const PUSH_MODEL_RESULT = @"result";
 static NSString * const PUSH_MODEL_MSG    = @"msg";
@@ -36,7 +37,7 @@ static NSString * const PUSH_MODEL_MSG    = @"msg";
         dict = [NSJSONSerialization JSONObjectWithData:obj
                                                options:kNilOptions
                                                  error:&err];
-        if(err) NSLog(@"ackWithType:andAckJson:-异常(\n%@\n)=>\n%@", json, err);
+        if(err) LogE(@"ackWithType:andAckJson:-异常(\n%@\n)=>\n%@", json, err);
     }
     //
     return [[PushAckModel alloc] initWithType:type andAck:dict];

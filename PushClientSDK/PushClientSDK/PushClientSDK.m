@@ -15,6 +15,8 @@
 #import "PushHttpRequestData.h"
 #import "PushSocket.h"
 
+#import "PushLogWrapper.h"
+
 static NSString * const PUSH_SRV_URL_PREFIX = @"http";
 static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/connect.do";
 
@@ -78,7 +80,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
         [url appendString:host];
     }
     [url appendString:PUSH_SRV_URL_SUFFIX];
-    NSLog(@"url:%@", url);
+    LogD(@"url:%@", url);
     //检查接入帐号
     if(!account || !account.length) @throw [NSException exceptionWithName:@"account" reason:@"接入帐号(account)不能为空!" userInfo:nil];
     //检查接入密码
@@ -93,7 +95,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 添加或更改用户标签
 -(void)addOrChangedTag:(NSString *)tag{
-    NSLog(@"addOrChangedTag=>%@", tag);
+    LogD(@"addOrChangedTag=>%@", tag);
     if(!tag || !tag.length) return;
     [_accessData addOrUpdateDeviceUserWithTag:tag];
     if(_socket){
@@ -103,7 +105,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 清除用户标签
 -(void)clearTag{
-    NSLog(@"clear...");
+    LogD(@"clear...");
     [_accessData addOrUpdateDeviceUserWithTag:nil];
     if(_socket){
         [_socket clearTagHandler];
@@ -112,13 +114,13 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 重启客户端
 -(void)restart{
-    NSLog(@"restart...");
+    LogD(@"restart...");
     [self startSocketClient];
 }
 
 #pragma mark -- 关闭推送客户端
 -(void)close{
-    NSLog(@"close...");
+    LogD(@"close...");
     [self stopSocketClient];
 }
 
@@ -128,7 +130,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
     if(!userInfo || !userInfo.count) return;
     PushPublishModel *model = [[PushPublishModel alloc] initWithData:userInfo];
     if(!model){
-        NSLog(@"receiveRemoteNotification-消息解析错误!=>%@", userInfo);
+        LogE(@"receiveRemoteNotification-消息解析错误!=>%@", userInfo);
         return;
     }
     //推送到App前台
@@ -151,11 +153,11 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
                                                                           @"text/html",nil];
     manager.responseSerializer = jsonResponseSerializer;
     [manager POST:_accessData.url parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"获取推送socket服务器数据成功:%@", responseObject);
+        LogI(@"获取推送socket服务器数据成功:%@", responseObject);
         NSInteger result  = [responseObject[@"result"] integerValue];
         if(result == 0){//获取Socket服务器配置成功
             NSDictionary *dict = responseObject[@"setting"];
-            NSLog(@"socket-settings=>%@", dict);
+            LogI(@"socket-settings=>%@", dict);
             [_accessData addOrUpdateConfigWithSocket:dict];
             [self startSocketClient];
         }else{
@@ -163,14 +165,14 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
             [self sendErrorWithType:PushClientSDKErrorTypeSrvConf message:[NSString stringWithFormat:@"%zd-%@", result, message]];
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"网络异常=>%@", error);
+        LogE(@"网络异常=>%@", error);
         [self sendErrorWithType:PushClientSDKErrorTypeConnect message:error.localizedDescription];
     }];
 }
 
 #pragma mark -- 启动socket客户端
 -(void)startSocketClient{
-    NSLog(@"startSocketClient...");
+    LogD(@"startSocketClient...");
     if(!_socket.delegate){
         _socket.delegate = self;
     }
@@ -180,7 +182,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 关闭socket客户端
 -(void)stopSocketClient{
-    NSLog(@"stopSocketClient...");
+    LogD(@"stopSocketClient...");
     if(_socket){
         [_socket stop];
     }
@@ -213,18 +215,18 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 获取socket配置数据
 -(void)pushSocket:(PushSocket *)socket withAccessConfig:(PushAccessData *__autoreleasing *)config{
-    NSLog(@"pushSocket:%@,withSocketConfig:%@", socket, *config);
+    LogD(@"pushSocket:%@,withSocketConfig:%@", socket, *config);
     if(_accessData){
         *config = _accessData;
     }else{
-        NSLog(@"pushSocket:withAccessConfig-未设置配置数据!");
+        LogE(@"pushSocket:withAccessConfig-未设置配置数据!");
         [self sendErrorWithType:PushClientSDKErrorTypeSrvConf message:@"pushSocket:withAccessConfig-未设置配置数据!"];
     }
 }
 
 #pragma mark -- 异常消息处理
 -(void)pushSocket:(PushSocket *)socket withMessageType:(PushSocketMessageType)type throwsError:(NSError *)error{
-    NSLog(@"pushSocket:%@,type:%zd,error:%@", socket, type, error);
+    LogD(@"pushSocket:%@,type:%zd,error:%@", socket, type, error);
     [self sendErrorWithType:PushClientSDKErrorTypeConnect message:error.description];
 }
 
@@ -235,9 +237,9 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 重新连接处理
 -(void)pushSocket:(PushSocket *)socket withStartReconnect:(BOOL)reconnect{
-    NSLog(@"重新连接=>%d", reconnect);
+    LogI(@"重新连接=>%d", reconnect);
     if(reconnect){
-        NSLog(@"开始重新请求HTTP...");
+        LogI(@"开始重新请求HTTP...");
         [self accessHttpServer];
     }else{
         [self startSocketClient];
@@ -246,7 +248,7 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 发送错误消息处理
 -(void)sendErrorWithType:(PushClientSDKErrorType)type message:(NSString *)msg{
-    NSLog(@"发生错误异常(%zd):%@", type, msg);
+    LogE(@"发生错误异常(%zd):%@", type, msg);
     if(self.delegate && [self.delegate respondsToSelector:@selector(pushClientSDK:withErrorType:andMessageDesc:)]){
         [self.delegate pushClientSDK:self withErrorType:type andMessageDesc:msg];
     }

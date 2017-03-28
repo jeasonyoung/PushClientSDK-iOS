@@ -7,6 +7,7 @@
 //
 
 #import "PushPingResponseModel.h"
+#import "PushLogWrapper.h"
 
 static NSString * const PUSH_PARAMS_HEART_RATE = @"heartRate";
 static NSString * const PUSH_PARAMS_AFTER_CONNECT = @"afterConnect";
@@ -33,7 +34,7 @@ static NSString * const PUSH_PARAMS_AFTER_CONNECT = @"afterConnect";
                                                          options:kNilOptions
                                                            error:&err];
     if(!dict || err){
-        NSLog(@"pingResponseWithJSON-异常:%@=>\n%@", err, json);
+        LogE(@"pingResponseWithJSON-异常:%@=>\n%@", err, json);
     }
     return [[PushPingResponseModel alloc] initWithData:dict];
 }

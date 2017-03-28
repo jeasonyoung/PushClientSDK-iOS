@@ -9,6 +9,8 @@
 #import "PushBaseModel.h"
 #import "NSString+PushExtTools.h"
 
+#import "PushLogWrapper.h"
+
 
 NSString * const PUSH_PARAMS_ACCOUNT = @"account";
 NSString * const PUSH_PARAMS_SIGN    = @"sign";
@@ -34,7 +36,7 @@ NSString * const PUSH_PARAMS_SIGN    = @"sign";
     NSMutableDictionary *signParams = [NSMutableDictionary dictionaryWithDictionary:_params];
     NSString *sign = [self toSignWithParams:signParams withToken:self.token];
     [signParams setObject:sign forKey:PUSH_PARAMS_SIGN];
-    NSLog(@"sign-params=>%@", signParams);
+    LogD(@"sign-params=>%@", signParams);
     return signParams;
 }
 
@@ -77,11 +79,11 @@ NSString * const PUSH_PARAMS_SIGN    = @"sign";
     if(str.length > 0){
         [str deleteCharactersInRange:NSMakeRange(str.length - 1, 1)];
     }
-    NSLog(@"md5前字符串-1=>%@", str);
+    LogD(@"md5前字符串-1=>%@", str);
     //添加
     [str appendString:token];
     NSString *sign = [str md5];
-    NSLog(@"md5前字符串-2(sign:%@)=>%@", sign, str);
+    LogD(@"md5前字符串-2(sign:%@)=>%@", sign, str);
     return sign;
 }
 

@@ -11,6 +11,8 @@
 #import "PushPublishModel.h"
 #import "PushPingResponseModel.h"
 
+#import "PushLogWrapper.h"
+
 #define PUSH_CODEC_DECODER_DQ_NAME "push_codec_decodec_queue"
 
 //成员变量。
@@ -44,13 +46,13 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
     if(!source || !source.length) return;
     if(!_header){//消息头处理
         if(source.length < PUSH_HEAD_DATA_MIN_LEN){
-            NSLog(@"decoderWithAppendData-数据最小长度应大于%zd!", PUSH_HEAD_DATA_MIN_LEN);
+            LogE(@"decoderWithAppendData-数据最小长度应大于%zd!", PUSH_HEAD_DATA_MIN_LEN);
             return;
         }
         NSUInteger index = 0;
         _header = [self decodeHeaderWithData:source withOutIndex:&index];
         if(!_header){
-            NSLog(@"解析消息头失败!");
+            LogE(@"解析消息头失败!");
             return;
         }
         //剩余的消息长度
@@ -105,19 +107,19 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
 -(void)decodeMessageWithHeader:(PushFixedHeader *)header andPayload:(NSData *)payload{
     dispatch_async(_queue, ^{//异步线程解析
         if(!header){
-            NSLog(@"decodeMessageWithHeader:andPayload-消息头为空，无法解析消息体!");
+            LogE(@"decodeMessageWithHeader:andPayload-消息头为空，无法解析消息体!");
             return;
         }
         NSString *json = nil;
         if(payload && payload.length){
             //转换为JSON字符串。
             json = [[NSString alloc] initWithData:payload encoding:NSUTF8StringEncoding];
-            NSLog(@"decodeMessageWithHeader:andPayload-[%zd]=>\n%@", header.type, json);
+            LogD(@"decodeMessageWithHeader:andPayload-[%zd]=>\n%@", header.type, json);
         }
         //解析消息体
         switch (header.type) {
             case PushSocketMessageTypeNone://未知消息
-                NSLog(@"decoderMessageWithHeader:andPayload-未知消息类型=>%zd", header.type);
+                LogE(@"decoderMessageWithHeader:andPayload-未知消息类型=>%zd", header.type);
                 break;
             case PushSocketMessageTypeConnack://连接请求应答
             case PushSocketMessageTypePubrel://推送消息达到请求应答
@@ -139,7 +141,7 @@ static NSUInteger const PUSH_HEAD_DATA_MIN_LEN = 5;
                 break;
             }
             default:{
-                NSLog(@"decoderMessageWithHeader:andPayload-消息类型不在处理范围内(%zd)!", header.type);
+                LogE(@"decoderMessageWithHeader:andPayload-消息类型不在处理范围内(%zd)!", header.type);
                 break;
             }
         }

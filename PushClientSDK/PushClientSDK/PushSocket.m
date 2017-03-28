@@ -12,6 +12,7 @@
 
 #import "GCDAsyncSocket.h"
 #import "PushCodecDecoder.h"
+#import "PushLogWrapper.h"
 
 #define PUSH_DISPATCH_QUEUE_DQ_NAME "com.csblank.push.dq"
 
@@ -60,7 +61,7 @@
 #pragma mark -- GCD Async Socket Delegate
 #pragma mark -- 连接成功调用
 -(void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
-    NSLog(@"socket(%@:%d)连接服务器成功!", host, port);
+    LogI(@"socket(%@:%d)连接服务器成功!", host, port);
     if(!self.isRun)_isRun = YES;//连接成功
     if(!self.getConfig){
         [self throwsErrorWithMessageType:PushSocketMessageTypeConnect andMessage:@"获取配置数据失败!"];
@@ -70,7 +71,7 @@
     __weak typeof(self) weakSelf = self;
     [self.getEncoder encodeConnectWithConfig:_config handler:^(NSData *data) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        NSLog(@"socket发送connectRequest请求...");
+        LogD(@"socket发送connectRequest请求...");
         //发送消息
         [strongSelf sendRequestWithData:data];
     }];
@@ -86,7 +87,7 @@
 }
 #pragma mark -- 读取数据
 -(void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
-    NSLog(@"开始读取socket反馈数据处理...");
+    LogD(@"开始读取socket反馈数据处理...");
     if(!data || !data.length) return;
     //设置时间戳
     _lastIdleTime = [NSDate date].timeIntervalSince1970;
@@ -99,14 +100,14 @@
 }
 #pragma mark -- 写入数据
 -(void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-    NSLog(@"socket发送数据完成!");
+    LogD(@"socket发送数据完成!");
     //设置时间戳
     _lastIdleTime = [NSDate date].timeIntervalSince1970;
 }
 
 #pragma mark -- CodecDecoderDelegate
 -(void)decodeWithType:(PushSocketMessageType)type andAckModel:(id)model{
-    NSLog(@"decoderWithType(%zd)andAckModel=>%@",type,model);
+    LogI(@"decoderWithType(%zd)andAckModel=>%@",type,model);
     switch (type) {
         case PushSocketMessageTypePingresp:{//心跳请求应答:
             [self receivePingAckHandler:model];
@@ -131,13 +132,13 @@
 #pragma mark -- 公开方法实现
 #pragma mark -- 启动
 -(void)start{
-    NSLog(@"PushSocket-start...");
+    LogD(@"PushSocket-start...");
     if(self.isRun){//判断是否已经启动。
-        NSLog(@"socket已启动!");
+        LogD(@"socket已启动!");
         return;
     }
     _isStart = YES;//设置启动。
-    NSLog(@"准备启动socket...");
+    LogD(@"准备启动socket...");
     //获取配置
     PushAccessData *conf = nil;
     if(![self loadWithConfig:&conf]){
@@ -165,7 +166,7 @@
 }
 #pragma mark -- 添加或更改用户标签处理。
 -(void)addOrChangedTagHandler{
-    NSLog(@"PushSocket-addOrChangedTagHandler...");
+    LogD(@"PushSocket-addOrChangedTagHandler...");
     //获取配置
     PushAccessData *conf = nil;
     if(![self loadWithConfig:&conf]){
@@ -187,7 +188,7 @@
 }
 #pragma mark -- 清除用户标签处理
 -(void)clearTagHandler{
-    NSLog(@"PushSocket-clearTagHandler...");
+    LogD(@"PushSocket-clearTagHandler...");
     if(!self.getConfig) return;
     //发起请求消息
     __weak typeof(self) weakSelf = self;
@@ -198,7 +199,7 @@
 }
 #pragma mark -- 停止
 -(void)stop{
-    NSLog(@"PushSocket-stop...");
+    LogD(@"PushSocket-stop...");
     _isStart = NO;//停止关闭
     if(!_config){
         [self throwsErrorWithMessageType:PushSocketMessageTypeSubscribe andMessage:@"获取配置失败!"];
@@ -219,9 +220,9 @@
 #pragma mark -- 发送请求数据。
 -(void)sendRequestWithData:(NSData *)data{
     if(!data || !data.length || !_socket)return;
-    NSLog(@"socket开始发送请求数据(%zd)....", data.length);
+    LogD(@"socket开始发送请求数据(%zd)....", data.length);
     if(!self.isRun){
-        NSLog(@"socket[已断开]发送消息失败!");
+        LogE(@"socket[已断开]发送消息失败!");
     }
     //发送数据
     [_socket writeData:data withTimeout:-1 tag:0];

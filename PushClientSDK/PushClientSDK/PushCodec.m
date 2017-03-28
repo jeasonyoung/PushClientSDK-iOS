@@ -7,6 +7,7 @@
 //
 
 #import "PushCodec.h"
+#import "PushLogWrapper.h"
 
 #pragma mark -- 消息头实现
 @implementation PushFixedHeader
@@ -50,7 +51,7 @@
 #pragma mark -- 消息编码
 -(NSData *)encodeWithHeader:(PushFixedHeader *)header andPayload:(NSString *)json{
     if(!header) return nil;
-    NSLog(@"发送[%zd]请求消息=>\n%@", header.type, json);
+    LogD(@"发送[%zd]请求消息=>\n%@", header.type, json);
     //消息体JSON转换
     NSData *body = nil;
     if(json && json.length){
@@ -63,7 +64,7 @@
     }
     NSInteger size = [self calcHeaderSizeWithPayload:(header.remainingLength)];
     if(size == -1){
-        NSLog(@"encodeWithHeader:andPayload:-消息长度超过规定的字节长度!=>\n%@",json);
+        LogE(@"encodeWithHeader:andPayload:-消息长度超过规定的字节长度!=>\n%@",json);
         return nil;
     }
     //初始化消息数据对象
@@ -129,7 +130,7 @@
     unsigned char b1 = 0;
     [data getBytes:&b1 range:NSMakeRange(current, 1)];
     if(b1 == 0){
-        NSLog(@"decodeHeaderWithData-读取消息头数据不符合通讯协议!");
+        LogE(@"decodeHeaderWithData-读取消息头数据不符合通讯协议!");
         return nil;
     }
     //消息类型
@@ -137,7 +138,7 @@
     //qos
     PushSocketMessageQos qos = (b1 & 0x06) >> 1;
     if(qos < PushSocketMessageQosNone || qos > PushSocketMessageQosAck){
-        NSLog(@"decodeHeaderWithData-读取的头数据不符合通讯协议的定义!");
+        LogE(@"decodeHeaderWithData-读取的头数据不符合通讯协议的定义!");
         return nil;
     }
     //读取消息体长度
@@ -146,7 +147,7 @@
     do{
         current += 1;
         if(current >= data.length){
-            NSLog(@"decodeHeaderWithData-索引越界(index=%zd,lenght=%zd)", current, data.length);
+            LogE(@"decodeHeaderWithData-索引越界(index=%zd,lenght=%zd)", current, data.length);
             return nil;
         }
         //读取后续字节
@@ -158,7 +159,7 @@
         loops++;
     }while(((digit & 0x80) != 0) && loops < 4);
     if(loops >= 4 && (digit & 0x80) != 0){
-        NSLog(@"decodeHeaderWithData-消息长度大于4个字节，不符合通讯协议!");
+        LogE(@"decodeHeaderWithData-消息长度大于4个字节，不符合通讯协议!");
         return nil;
     }
     *index = current;

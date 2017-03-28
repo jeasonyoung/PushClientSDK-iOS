@@ -7,6 +7,7 @@
 //
 
 #import "PushPublishModel.h"
+#import "PushLogWrapper.h"
 
 #pragma mark -- 推送弹出消息数据
 static NSString * const PUSH_PUBLISH_APS_ALERT_TITLE = @"title";
@@ -87,7 +88,7 @@ static NSString * const PUSH_PUBLISH_APS = @"aps";
 
 //静态初始化
 +(instancetype)publishWithJSON:(NSString *)json{
-    NSLog(@"publishWithJSON=>%@", json);
+    LogD(@"publishWithJSON=>%@", json);
     if(!json || !json.length) return nil;
     //
     NSError *err = nil;
@@ -95,7 +96,7 @@ static NSString * const PUSH_PUBLISH_APS = @"aps";
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:objData
                                                          options:kNilOptions
                                                            error:&err];
-    if(err) NSLog(@"publishWithJSON:-异常(\n%@\n)=>\n%@", json, err);
+    if(err) LogE(@"publishWithJSON:-异常(\n%@\n)=>\n%@", json, err);
     //
     return [[PushPublishModel alloc] initWithData:dict];
 }

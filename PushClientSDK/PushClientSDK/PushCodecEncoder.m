@@ -14,15 +14,17 @@
 #import "PushPingRequestModel.h"
 #import "PushDisconnectModel.h"
 
+#import "PushLogWrapper.h"
+
 //实现
 @implementation PushCodecEncoder
 
 #pragma mark -- 连接请求编码处理。
 -(void)encodeConnectWithConfig:(PushAccessData *)config
                         handler:(PushCodecEncoderBlock)block{
-    NSLog(@"开始客户端发起[connect]请求处理...");
+    LogI(@"开始客户端发起[connect]请求处理...");
     if(!config){
-        NSLog(@"获取配置数据失败!");
+        LogE(@"获取配置数据失败!");
         return;
     }
     //创建消息数据
@@ -38,13 +40,13 @@
 -(void)encodePublishAckRequestWithConfig:(PushAccessData *)config
                                 andPushId:(NSString *)pushId
                                   handler:(PushCodecEncoderBlock)block{
-    NSLog(@"开始客户端发起[publish-request]请求处理...");
+    LogI(@"开始客户端发起[publish-request]请求处理...");
     if(!config){
-        NSLog(@"获取配置数据失败!");
+        LogE(@"获取配置数据失败!");
         return;
     }
     if(!pushId || !pushId.length){
-        NSLog(@"推送ID不存在!");
+        LogE(@"推送ID不存在!");
         return;
     }
     //创建消息达到请求数据
@@ -58,13 +60,13 @@
 #pragma mark -- 用户登录请求消息编码处理。
 -(void)encodeSubscribeWithConfig:(PushAccessData *)config
                           handler:(PushCodecEncoderBlock)block{
-    NSLog(@"开始客户端发起[Subscribe-request]请求处理...");
+    LogI(@"开始客户端发起[Subscribe-request]请求处理...");
     if(!config){
-        NSLog(@"获取配置数据失败!");
+        LogE(@"获取配置数据失败!");
         return;
     }
     if(!config.tag || !config.tag.length){
-        NSLog(@"获取设备标签(tag)不存在!");
+        LogE(@"获取设备标签(tag)不存在!");
         return;
     }
     //创建用户登录请求消息数据
@@ -78,9 +80,9 @@
 #pragma mark -- 用户注销请求消息编码处理。
 -(void)encodeUnsubscribeWithConfig:(PushAccessData *)config
                             handler:(PushCodecEncoderBlock)block{
-    NSLog(@"开始客户端发起[Unsubscribe-request]请求处理...");
+    LogI(@"开始客户端发起[Unsubscribe-request]请求处理...");
     if(!config){
-        NSLog(@"获取配置数据失败!");
+        LogE(@"获取配置数据失败!");
         return;
     }
     //创建用户注销请求消息数据
@@ -93,9 +95,9 @@
 #pragma mark -- 心跳请求数据消息编码处理
 -(void)encodePingRequestWithConfig:(PushAccessData *)config
                             handler:(PushCodecEncoderBlock)block{
-    NSLog(@"开始客户端发起[Ping-request]请求处理...");
+    LogD(@"开始客户端发起[Ping-request]请求处理...");
     if(!config){
-        NSLog(@"获取配置数据失败!");
+        LogE(@"获取配置数据失败!");
         return;
     }
     //创建心跳请求消息数据
@@ -108,9 +110,9 @@
 #pragma mark -- 断开连接请求消息编码处理。
 -(void)encodeDisconnectWithConfig:(PushAccessData *)config
                            handler:(PushCodecEncoderBlock)block{
-    NSLog(@"开始客户端发起[Disconnect-request]请求处理...");
+    LogI(@"开始客户端发起[Disconnect-request]请求处理...");
     if(!config){
-        NSLog(@"获取配置数据失败!");
+        LogE(@"获取配置数据失败!");
         return;
     }
     //创建断开连接请求消息数据

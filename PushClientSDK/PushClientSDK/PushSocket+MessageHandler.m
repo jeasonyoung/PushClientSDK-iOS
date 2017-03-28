@@ -8,6 +8,7 @@
 
 #import "PushSocket+MessageHandler.h"
 #import "PushSocket+Timer.h"
+#import "PushLogWrapper.h"
 
 //实现
 @implementation PushSocket (MessageHandler)
@@ -15,21 +16,21 @@
 #pragma mark -- 接收反馈数据处理。
 -(void)receiveAckHandler:(PushAckModel *)ack{
     if(ack.result == PushAckModelResultSuccess){
-        NSLog(@"socket发送(%zd)请求反馈成功!", ack.type);
+        LogI(@"socket发送(%zd)请求反馈成功!", ack.type);
         if(ack.type == PushSocketMessageTypeConnack){//判断是否为连接成功应答
-            NSLog(@"socket客户端准备开启心跳处理...");
+            LogI(@"socket客户端准备开启心跳处理...");
             [self startPingHandler];
         }
         return;
     }
-    NSLog(@"socket发送(%zd)请求失败(%zd)=>%@", ack.type, ack.result, ack.msg);
+    LogE(@"socket发送(%zd)请求失败(%zd)=>%@", ack.type, ack.result, ack.msg);
     [self stop];//停止服务
     [self throwsErrorWithMessageType:ack.type andMessage:ack.msg];
 }
 
 #pragma mark -- 接收心跳应答处理
 -(void)receivePingAckHandler:(PushPingResponseModel *)pingAck{
-    NSLog(@"socket-心跳反馈处理=>%@", pingAck);
+    LogD(@"socket-心跳反馈处理=>%@", pingAck);
     if(!pingAck) return;
     if(pingAck.heartRate > 0 && self.getConfig && self.getConfig.socket){
         self.getConfig.socket.rate = pingAck.heartRate;
@@ -61,7 +62,7 @@
     }];
     //判断消息是否已接收过
     if(self.getPushIdCache.count > 0 && [self.getPushIdCache containsObject:data.pushId]){
-        NSLog(@"消息[%@]已推送过，将忽略不向App展示!", data.pushId);
+        LogI(@"消息[%@]已推送过，将忽略不向App展示!", data.pushId);
         return;
     }
     //将数据保存到缓存中
