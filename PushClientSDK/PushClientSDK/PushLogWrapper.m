@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *docDir = [paths objectAtIndex:0];
     //获取日志存储目标名称
-    NSString *logDir = [docDir stringByAppendingString:PUSH_LOG_DIR];
+    NSString *logDir = [docDir stringByAppendingPathComponent:PUSH_LOG_DIR];
     //获取文件管理器
     NSFileManager *fileMgr = [NSFileManager defaultManager];
     BOOL isDir = NO;
