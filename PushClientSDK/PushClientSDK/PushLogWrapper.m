@@ -178,7 +178,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             NSString *date = [dateFormatter stringFromDate:[NSDate date]];
             //日志内容
-            NSString *content = [NSString stringWithFormat:@"[%@][%@]%@\n", date, strLevel, log];
+            NSString *content = [NSString stringWithFormat:@"\n\n[%@][%@]%@\n", date, strLevel, log];
             //数据编码
             NSData *data = [content dataUsingEncoding:NSUTF8StringEncoding];
             //追加写入文件
