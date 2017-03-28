@@ -167,7 +167,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     dispatch_async(_queue, ^{
         @try {
             //创建日志文件
-            NSString *path = [self createLogFilePathWithLevel:level];
+            NSString *path = [self createLogFilePathWithLevel:level withLevelName:strLevel];
             if(!path) return;
             //获取文件句柄
             NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:path];
@@ -189,7 +189,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     });
 }
 
--(NSString *)createLogFilePathWithLevel:(PushLogWrapperLevel)level{
+-(NSString *)createLogFilePathWithLevel:(PushLogWrapperLevel)level withLevelName:(NSString *)name{
     //日期格式处理
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     //检查日志文件是否存在
     if(![fileMgr fileExistsAtPath:logFilePath]){
         //初始化日志文件头
-        NSString *initContent = @"-------------------------------------\n push sdk log \n-------------------------------------\n";
+        NSString *initContent = [NSString stringWithFormat:@"-------------------------------------\n push sdk [%@] log \n-------------------------------------\n", name];
         NSData *data = [initContent dataUsingEncoding:NSUTF8StringEncoding];
         //创建日志文件
         BOOL isCreateFile = [fileMgr createFileAtPath:logFilePath contents:data attributes:nil];
