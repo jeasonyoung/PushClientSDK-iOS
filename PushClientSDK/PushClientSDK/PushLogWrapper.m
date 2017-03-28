@@ -196,7 +196,8 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     [formatter setDateFormat:@"yyyyMMddHH"];//日志按小时保存
     NSString *date = [formatter stringFromDate:[NSDate date]];
     //创建日志文件名
-    NSString *logFilePath = [self.getRootDir stringByAppendingFormat:@"%@-%zd-%@.log",PUSH_LOG_FILE_PREFIX, level, date];
+    NSString *logFileName = [NSString stringWithFormat:@"%@-%zd-%@.log",PUSH_LOG_FILE_PREFIX, level, date];
+    NSString *logFilePath = [self.getRootDir stringByAppendingPathComponent:logFileName];
     //文件管理器
     NSFileManager *fileMgr  = [NSFileManager defaultManager];
     //检查日志文件是否存在
