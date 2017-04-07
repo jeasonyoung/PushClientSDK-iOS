@@ -8,6 +8,17 @@
 
 #import "PushLogWrapper.h"
 
+#define PUSH_LOG_WRAPPER_QUEUE "push_log_wrapper_queue"
+#define PUSH_LOG_DIR @"PushClientSDKLogs"
+#define PUSH_LOG_FILE_PREFIX @"pushSDK"
+
+#define DLog(fmt, ...) NSLog(fmt, ##__VA_ARGS__);
+
+
+NSString * const PUSH_SRV_URL_PREFIX      = @"http";
+NSString * const PUSH_SRV_URL_SUFFIX      = @"/push-http-connect/v1/callback/connect.do";
+NSString * const PUSH_UPLOADER_URL_SUFFIX = @"/push-http-connect/v1/callback/uploader.do";
+
 /**
  * @brief 推送日志级别枚举。
  **/
@@ -30,23 +41,11 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     PushLogWrapperLevelError = 4
 };
 
-#define PUSH_LOG_WRAPPER_QUEUE "push_log_wrapper_queue"
-#define PUSH_LOG_DIR @"PushClientSDKLogs"
-#define PUSH_LOG_FILE_PREFIX @"pushSDK"
-
-
-#define DLog(fmt, ...) NSLog(fmt, ##__VA_ARGS__);
-
 //成员变量
 @interface PushLogWrapper (){
     //日志写队列
     dispatch_queue_t _queue;
 }
-
-/**
- * @brief 日志文件存储根目录。
- **/
-@property(copy, atomic, readonly, getter=getRootDir)NSString *rootDir;
 
 @end
 
@@ -142,35 +141,20 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
 
 -(void)writeLogFileWithLevel:(PushLogWrapperLevel)level andLog:(NSString *)log{
     if(!log || log.length == 0) return;
-    NSString *strLevel = @"none";
-    switch (level) {
-        case PushLogWrapperLevelDebug:
-            strLevel = @"debug";
-            break;
-        case PushLogWrapperLevelInfo:
-            strLevel = @"info";
-            break;
-        case PushLogWrapperLevelWarn:
-            strLevel = @"warn";
-            break;
-        case PushLogWrapperLevelError:
-            strLevel = @"error";
-            break;
-        default: break;
-    }
-
+    NSString *strLevel = [self loadLogLevelNameWithType:level];
 //#ifdef DEBUG
     DLog(@"[%@]%@", strLevel, log);
 //#endif
     
     //日志写入文件处理
     dispatch_async(_queue, ^{
+        NSFileHandle *fileHandle = nil;
         @try {
             //创建日志文件
             NSString *path = [self createLogFilePathWithLevel:level withLevelName:strLevel];
             if(!path) return;
             //获取文件句柄
-            NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:path];
+            fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:path];
             //跳到文件的末尾
             [fileHandle seekToEndOfFile];
             //日期格式化
@@ -185,18 +169,24 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
             [fileHandle writeData:data];
         } @catch (NSException *exception) {
             DLog(@"写入日志文件异常:%@", exception);
+        } @finally{
+            if(fileHandle){
+                [fileHandle closeFile];
+            }
         }
     });
 }
 
 -(NSString *)createLogFilePathWithLevel:(PushLogWrapperLevel)level withLevelName:(NSString *)name{
+    //日志类型枚举名称
+    NSString *strLevel = [self loadLogLevelNameWithType:level];
     //日期格式处理
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
     [formatter setDateFormat:@"yyyyMMddHH"];//日志按小时保存
     NSString *date = [formatter stringFromDate:[NSDate date]];
     //创建日志文件名
-    NSString *logFileName = [NSString stringWithFormat:@"%@-%zd-%@.log",PUSH_LOG_FILE_PREFIX, level, date];
+    NSString *logFileName = [NSString stringWithFormat:@"%@_%@_%@.log",PUSH_LOG_FILE_PREFIX, strLevel, date];
     NSString *logFilePath = [self.getRootDir stringByAppendingPathComponent:logFileName];
     //文件管理器
     NSFileManager *fileMgr  = [NSFileManager defaultManager];
@@ -213,5 +203,26 @@ typedef NS_ENUM(NSInteger,PushLogWrapperLevel){
     return logFilePath;
 }
 
+
+//获取日志级别枚举名称
+-(NSString *)loadLogLevelNameWithType:(PushLogWrapperLevel)level{
+    NSString *strLevel = @"none";
+    switch (level) {
+        case PushLogWrapperLevelDebug:
+            strLevel = @"debug";
+            break;
+        case PushLogWrapperLevelInfo:
+            strLevel = @"info";
+            break;
+        case PushLogWrapperLevelWarn:
+            strLevel = @"warn";
+            break;
+        case PushLogWrapperLevelError:
+            strLevel = @"error";
+            break;
+        default: break;
+    }
+    return strLevel;
+}
 
 @end

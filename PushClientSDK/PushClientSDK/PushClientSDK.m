@@ -17,9 +17,6 @@
 
 #import "PushLogWrapper.h"
 
-static NSString * const PUSH_SRV_URL_PREFIX = @"http";
-static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/connect.do";
-
 //构造函数
 @interface PushClientSDK ()<PushSocketHandlerDelegate>{
     PushAccessData *_accessData;
@@ -127,14 +124,16 @@ static NSString * const PUSH_SRV_URL_SUFFIX = @"/push-http-connect/v1/callback/c
 
 #pragma mark -- 接收远程推送消息。
 -(void)receiveRemoteNotification:(NSDictionary *)userInfo{
-    if(!userInfo || !userInfo.count) return;
+    if(!userInfo || !userInfo.count) return;    
     PushPublishModel *model = [[PushPublishModel alloc] initWithData:userInfo];
     if(!model){
         LogE(@"receiveRemoteNotification-消息解析错误!=>%@", userInfo);
         return;
     }
     //推送到App前台
-    [self pushwithPublish:model withIsApns:YES];
+    if(model.pushId && model.content){
+        [self pushwithPublish:model withIsApns:YES];
+    }
 }
 
 #pragma mark -- 内部方法。

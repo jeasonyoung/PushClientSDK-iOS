@@ -16,9 +16,30 @@
 
 
 /**
+ * @brief 服务器URL前缀。
+ **/
+FOUNDATION_EXPORT NSString * const PUSH_SRV_URL_PREFIX;
+
+/**
+ * @brief 服务器HTTP请求后缀
+ **/
+FOUNDATION_EXPORT NSString * const PUSH_SRV_URL_SUFFIX;
+
+/**
+ * @brief 日志上传URL后缀
+ **/
+FOUNDATION_EXPORT NSString * const PUSH_UPLOADER_URL_SUFFIX;
+
+
+/**
  * @brief 日志管理
  **/
 @interface PushLogWrapper : NSObject
+
+/**
+ * @brief 日志文件存储根目录。
+ **/
+@property(copy, atomic, readonly, getter=getRootDir)NSString *rootDir;
 
 /**
  * @brief 单例实例。

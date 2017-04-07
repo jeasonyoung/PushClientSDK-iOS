@@ -14,6 +14,7 @@
 		A10A0F4E1E4AC3C500F2B8C3 /* PushClientSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10A0F4B1E4AC3C500F2B8C3 /* PushClientSDK.h */; };
 		A10B42F91E59E3670023C160 /* PushSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A10B42F81E59E3670023C160 /* PushSocket.m */; };
 		A147B7E21E88F8E9005EBE1A /* PushLogWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A147B7E11E88F8E9005EBE1A /* PushLogWrapper.m */; };
+		A151815B1E9727F90064664E /* PushLogUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = A151815A1E9727F90064664E /* PushLogUpload.m */; };
 		A1A56B651E56A7D500C2A2D5 /* PushSocketConfigData.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A56B641E56A7D500C2A2D5 /* PushSocketConfigData.m */; };
 		A1B2B83F1E5D7BC800D944FE /* PushCodecEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B83E1E5D7BC800D944FE /* PushCodecEncoder.m */; };
 		A1B2B8421E5DCF0D00D944FE /* PushCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2B8411E5DCF0D00D944FE /* PushCodec.m */; };
@@ -63,6 +64,8 @@
 		A10B42F81E59E3670023C160 /* PushSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushSocket.m; sourceTree = "<group>"; };
 		A147B7E01E88F8E9005EBE1A /* PushLogWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushLogWrapper.h; sourceTree = "<group>"; };
 		A147B7E11E88F8E9005EBE1A /* PushLogWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushLogWrapper.m; sourceTree = "<group>"; };
+		A15181591E9727F90064664E /* PushLogUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushLogUpload.h; sourceTree = "<group>"; };
+		A151815A1E9727F90064664E /* PushLogUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushLogUpload.m; sourceTree = "<group>"; };
 		A1A56B631E56A7D500C2A2D5 /* PushSocketConfigData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushSocketConfigData.h; sourceTree = "<group>"; };
 		A1A56B641E56A7D500C2A2D5 /* PushSocketConfigData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushSocketConfigData.m; sourceTree = "<group>"; };
 		A1B2B83D1E5D7BC800D944FE /* PushCodecEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushCodecEncoder.h; sourceTree = "<group>"; };
@@ -142,6 +145,8 @@
 				A104351B1E4C0EAD00CEC953 /* NSString+PushExtTools.m */,
 				A147B7E01E88F8E9005EBE1A /* PushLogWrapper.h */,
 				A147B7E11E88F8E9005EBE1A /* PushLogWrapper.m */,
+				A15181591E9727F90064664E /* PushLogUpload.h */,
+				A151815A1E9727F90064664E /* PushLogUpload.m */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -336,6 +341,7 @@
 				A10A0F4D1E4AC3C500F2B8C3 /* PushClientSDK.m in Sources */,
 				A1E2B0FE1E5B1ACF0084FD87 /* PushRequestModel.m in Sources */,
 				A1B2B84B1E63D09700D944FE /* PushSocket+Timer.m in Sources */,
+				A151815B1E9727F90064664E /* PushLogUpload.m in Sources */,
 				A1B2B84E1E63D79A00D944FE /* PushDisconnectModel.m in Sources */,
 				A1E2B0FB1E5AF54D0084FD87 /* PushBaseModel.m in Sources */,
 				A147B7E21E88F8E9005EBE1A /* PushLogWrapper.m in Sources */,

@@ -10,6 +10,11 @@
 #import "PushRequestModel.h"
 
 /**
+ * 设备类型值
+ **/
+FOUNDATION_EXPORT NSUInteger const PUSH_CURRENT_DEVICE_TYPE_VALUE;
+
+/**
  * @brief 连接请求。
  **/
 @interface PushConnectRequestModel : PushRequestModel

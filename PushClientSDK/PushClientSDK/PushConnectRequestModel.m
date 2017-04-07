@@ -11,7 +11,7 @@
 /**
  * @brief 设备类型(1-iOS,2-Android)
  **/
-static NSUInteger const PUSH_CURRENT_DEVICE_TYPE_VALUE = 1;
+NSUInteger const PUSH_CURRENT_DEVICE_TYPE_VALUE = 1;
 
 static NSString * const PUSH_PARAMS_DEVICE_NAME = @"deviceName";//2.设备用户(tag)
 static NSString * const PUSH_PARAMS_DEVICE_TYPE = @"deviceType";//3.设备类型

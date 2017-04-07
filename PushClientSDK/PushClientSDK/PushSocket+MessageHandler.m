@@ -10,6 +10,8 @@
 #import "PushSocket+Timer.h"
 #import "PushLogWrapper.h"
 
+#import "PushLogUpload.h"
+
 //实现
 @implementation PushSocket (MessageHandler)
 
@@ -42,6 +44,8 @@
         //启动重启定时器
         [self restartHandler];
     }
+    //上传日志处理
+    [[PushLogUpload shareInstance] uploaderWithAccess:self.getConfig];
 }
 
 #pragma mark -- 接收推送消息数据处理
